@@ -11,6 +11,11 @@ jobs:
         run: |
           apt-get update
           apt-get install -y python3 python3-pip python3-venv
+      - name: Set version
+        run: |
+          VERSION=$(cat VERSION) \
+              && sed -i "s/0.0.0/$VERSION/" setup.py \
+              && sed -i "s/0.0.0/$VERSION/" pyproject.toml
       - name: Build agent
         run: |
           python3 -m pip install --upgrade build

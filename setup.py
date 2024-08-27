@@ -1,14 +1,12 @@
 from setuptools import setup, find_packages
 
-
 def readme():
     with open('Readme.md', 'r') as f:
         return f.read()
 
-
 setup(
     name='immunity-python-agent',
-    version='0.0.1',
+    version='0.0.0',
     author='l1ghth4t',
     author_email='pirogov30002@gmail.com',
     description='Python-агент Immunity IAST для интерактивного сканирования веб-приложений.',

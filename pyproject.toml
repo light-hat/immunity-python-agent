@@ -5,7 +5,7 @@ requires = [
 ]
 [project]
 name = "immunity-python-agent"
-version = "0.0.1"
+version = "0.0.0"
 authors = [
     { name="l1ghth4t", email="pirogov30002@gmail.com" },
 ]
