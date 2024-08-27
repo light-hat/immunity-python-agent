@@ -1,0 +1,19 @@
+[build-system]
+build-backend = 'setuptools.build_meta'
+requires = [
+    'setuptools',
+]
+[project]
+name = "immunity-python-agent"
+version = "0.0.1"
+authors = [
+    { name="l1ghth4t", email="pirogov30002@gmail.com" },
+]
+description = "Python-агент Immunity IAST для интерактивного сканирования веб-приложений."
+readme = "Readme.md"
+requires-python = ">=3.9"
+classifiers = [
+    'Programming Language :: Python :: 3.11',
+    'License :: OSI Approved :: MIT License',
+    'Operating System :: OS Independent'
+]
