@@ -1,6 +1,6 @@
 name: Сборка Python-библиотеки
 on:
-  push:
+  tags:
 jobs:
   build-test:
     name: Build immunity agent

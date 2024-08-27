@@ -11,5 +11,11 @@ docker build -t agent_builder .
 Установка пакета:
 
 ```bash
-to be continued.....
+pip install --index-url https://gitverse.ru/api/packages/immunity_iast/pypi/simple/ immunity-python-agent
+```
+
+Автоматическая публикация пакета с поднятием версии:
+
+```powershell
+.\deploy.ps1
 ```
