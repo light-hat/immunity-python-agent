@@ -11,7 +11,7 @@ setup(
     version='0.0.1',
     author='l1ghth4t',
     author_email='pirogov30002@gmail.com',
-    description='IAST-агент для сканирования Python-приложений.',
+    description='Python-агент Immunity IAST для интерактивного сканирования веб-приложений.',
     long_description=readme(),
     long_description_content_type='text/markdown',
     #url='your_url',
@@ -24,7 +24,7 @@ setup(
     ],
     keywords='iast security scanner ',
     project_urls={
-        'GitVerse': 'your_github'
+        'GitVerse': 'https://gitverse.ru/l1ghth4t/immunity-python-agent'
     },
     python_requires='>=3.9'
 )

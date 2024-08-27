@@ -1,0 +1,14 @@
+name: Сборка Python-библиотеки
+on:
+  push:
+jobs:
+  build-test:
+    name: Hello world
+    runs-on: ubuntu-latest
+    steps:
+      - name: Event name
+        run: echo ${{ gitverse.event.name }}
+      - name: Display workflow
+        run: echo ${{ gitverse.workflow }}
+      - name: Repo name
+        run: echo ${{ gitverse.Repository }}
