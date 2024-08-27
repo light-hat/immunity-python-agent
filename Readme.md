@@ -7,3 +7,9 @@ IAST-агент, встраиваемый в сканируемые прилож
 ```bash
 docker build -t agent_builder .
 ```
+
+Установка пакета:
+
+```bash
+to be continued...
+```
