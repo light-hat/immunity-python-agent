@@ -22,4 +22,5 @@ jobs:
           python3 -m build
       - name: Publish package
         run: |
+          pip install --user --upgrade twine
           python3 -m twine upload --repository gitverse dist/*
