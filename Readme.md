@@ -23,3 +23,9 @@ docker build -t agent_builder .
 ```bash
 pip install --index-url https://gitverse.ru/api/packages/immunity_iast/pypi/simple/ immunity-python-agent
 ```
+
+Обновление установленного ранее пакета:
+
+```bash
+pip install --index-url https://gitverse.ru/api/packages/immunity_iast/pypi/simple/ immunity-python-agent --upgrade
+```
