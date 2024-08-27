@@ -10,7 +10,8 @@ $patch = [int]$Matches[1] + 1
 $version = "$($major).$($minor).$($patch)"
 
 Write-Host 'The new version is: ' $version
-echo $version > VERSION
+$Utf8NoBomEncoding = New-Object System.Text.UTF8Encoding $False
+[System.IO.File]::WriteAllLines($VERSION, $version, $Utf8NoBomEncoding)
 
 git add .
 git commit -m "publish version $version"
