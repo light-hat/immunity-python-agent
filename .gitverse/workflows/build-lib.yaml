@@ -23,4 +23,4 @@ jobs:
       - name: Publish package
         run: |
           pip install --user --upgrade twine
-          python3 -m twine upload dist/* -u l1ghth4t -p ${{ secrets.PWD }} --repository-url https://gitverse.ru/api/packages/l1ghth4t/pypi
+          python3 -m twine upload dist/* -u l1ghth4t -p ${{ secrets.PWD }} --repository-url https://gitverse.ru/api/packages/immunity_iast/pypi
