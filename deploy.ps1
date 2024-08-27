@@ -11,8 +11,8 @@ $version = "$($major).$($minor).$($patch)"
 
 Write-Host 'The new version is: ' $version
 echo $version > VERSION
-git tag -a $version -m $version
 
 git add .
 git commit -m "publish version $version"
+git tag -a $version -m $version
 git push -u origin $branch --follow-tags
