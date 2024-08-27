@@ -11,5 +11,5 @@ docker build -t agent_builder .
 Установка пакета:
 
 ```bash
-to be continued...
+to be continued....
 ```
