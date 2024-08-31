@@ -1,0 +1,11 @@
+.idea
+*.iml
+out
+gen
+manage.py
+dev
+Dockerfile
+deploy.ps1
+VERSION
+venv
+.gitignore
