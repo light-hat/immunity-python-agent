@@ -5,6 +5,9 @@ import inspect
 import traceback
 from immunity_agent.call_tree.node import Node
 
+import matplotlib
+matplotlib.use('Agg')
+
 import networkx as nx
 import matplotlib.pyplot as plt
 
@@ -175,7 +178,7 @@ class CallTreeBuilder:
         # Рисуем граф
         pos = nx.spring_layout(G)
         labels = nx.get_node_attributes(G, 'label')
-        nx.draw(G, pos, with_labels=True, labels=labels, node_size=2000, node_color='skyblue', font_size=10, font_weight='bold', edge_color='gray')
+        nx.draw(G, pos, with_labels=True, labels=labels, node_size=900, node_color='teal', font_size=7, font_weight='bold', edge_color='gray')
         plt.title("Call Graph")
-        plt.figure(figsize=(2048,2048))
+        plt.figure(figsize=(20,20))
         plt.savefig("D:\\graph.png")
