@@ -1,5 +1,7 @@
 import sys
 import json
+import inspect
+import traceback
 from immunity_agent.call_tree.node import Node
 
 import networkx as nx
@@ -25,18 +27,7 @@ class CallTreeBuilder:
             if not filename.startswith(self.project_root):
                 if not self.in_library_code:
                     #######################
-                    func_name = frame.f_code.co_name
-                    args = frame.f_locals  # Локальные переменные (аргументы функции)
-
-                    # Создаем новый узел для функции
-                    new_node = Node(func_name, args)
-
-                    # Если это первый вызов, устанавливаем его корнем
-                    if not self.root is None:
-                        # Добавляем новый узел как дочерний к текущему узлу
-                        self.current_node.add_child(new_node)
-                        # Переходим к новому узлу (новый контекст)
-                        self.current_node = new_node
+                    self.process_call(frame)
                     #######################
                     # Мы зашли в библиотечный код; устанавливаем флаг
                     self.in_library_code = True
@@ -49,32 +40,109 @@ class CallTreeBuilder:
 
             if self.project_root in filename:
                 if event == 'call':
-                    func_name = frame.f_code.co_name
-                    args = frame.f_locals  # Локальные переменные (аргументы функции)
+                    self.process_call(frame)
 
-                    # Создаем новый узел для функции
-                    new_node = Node(func_name, args)
-
-                    # Если это первый вызов, устанавливаем его корнем
-                    if self.root is None:
-                        self.root = new_node
-                        self.current_node = new_node
-                    else:
-                        # Добавляем новый узел как дочерний к текущему узлу
-                        self.current_node.add_child(new_node)
-                        # Переходим к новому узлу (новый контекст)
-                        self.current_node = new_node
+                elif event == 'line':
+                    self.process_line(frame)
 
                 elif event == 'return':
-                    # Переходим к родительскому узлу (возврат из функции)
-                    if self.current_node.parent is not None:
-                        self.current_node = self.current_node.parent
+                    self.process_return(frame)
 
         except AttributeError as e:
             print(f"Ignored AttributeError: {e}")
 
         # Возвращаем саму функцию для продолжения отслеживания
         return self.trace_calls
+
+    def process_call(self, frame):
+        func_name = frame.f_code.co_name
+        args = frame.f_locals  # Локальные переменные (аргументы функции)
+
+        # Создаем новый узел для функции
+        new_node = Node(func_name, args)
+
+        # Если это первый вызов, устанавливаем его корнем
+        if self.root is None:
+            self.root = new_node
+            self.current_node = new_node
+        else:
+            # Добавляем новый узел как дочерний к текущему узлу
+            self.current_node.add_child(new_node)
+            # Переходим к новому узлу (новый контекст)
+            self.current_node = new_node
+
+    def process_line(self, frame):
+        line_no = frame.f_lineno
+        filename = frame.f_code.co_filename
+
+        # Получаем исходный код строки
+        source_code = inspect.getframeinfo(frame).code_context[0].strip()
+
+        # Разбираем строку в AST
+        tree = ast.parse(source_code, mode='exec')
+
+        # Обходим дерево AST и извлекаем информацию о переменных и функциях
+        # Для этого можно использовать ast.NodeVisitor или аналогичный метод
+        self.analyze_ast(tree, frame)
+
+    #####################
+
+    def analyze_ast(self, tree, frame):
+        # Проходим по AST дерева, чтобы найти вызовы функций и переменные
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Call):
+                func_name = self.get_func_name(node)
+                args = self.get_func_args(node, frame)
+
+                # Создаем новый узел для вызова функции
+                new_node = Node(func_name, args)
+                self.node_counter += 1
+
+                self.current_node.add_child(new_node)
+                self.current_node = new_node
+            elif isinstance(node, ast.Assign):
+                # Найдем все переменные, которым происходит присваивание
+                for target in node.targets:
+                    if isinstance(target, ast.Name):
+                        var_name = target.id
+                        value = self.get_variable_value(var_name, frame)
+
+                        # Создаем новый узел для переменной
+                        new_node = Node(f"Assign: {var_name}", {var_name: value})
+                        self.node_counter += 1
+
+                        self.current_node.add_child(new_node)
+                        self.current_node = new_node
+
+    def get_func_name(self, node):
+        # Получаем имя функции из AST узла
+        if isinstance(node.func, ast.Name):
+            return node.func.id
+        elif isinstance(node.func, ast.Attribute):
+            return f"{node.func.value.id}.{node.func.attr}"
+        return "unknown"
+
+    def get_func_args(self, node, frame):
+        # Извлекаем аргументы функции из AST и текущего фрейма
+        args = {}
+        for arg in node.args:
+            if isinstance(arg, ast.Name):
+                arg_name = arg.id
+                args[arg_name] = frame.f_locals.get(arg_name, '<unknown>')
+            elif isinstance(arg, (ast.Constant, ast.Str, ast.Num)):
+                args[str(arg)] = arg.value
+        return args
+
+    def get_variable_value(self, var_name, frame):
+        # Получаем значение переменной из текущего фрейма
+        return frame.f_locals.get(var_name, '<unknown>')
+
+    #########################
+
+    def process_return(self, frame):
+        # Переходим к родительскому узлу (возврат из функции)
+        if self.current_node.parent is not None:
+            self.current_node = self.current_node.parent
 
     def serialize_to_json(self):
         """Сериализует дерево вызовов в формат JSON."""
@@ -106,4 +174,4 @@ class CallTreeBuilder:
         labels = nx.get_node_attributes(G, 'label')
         nx.draw(G, pos, with_labels=True, labels=labels, node_size=2000, node_color='skyblue', font_size=10, font_weight='bold', edge_color='gray')
         plt.title("Call Graph")
-        plt.show()
+        plt.savefig("D:\\graph.png")
