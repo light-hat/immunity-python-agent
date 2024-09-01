@@ -30,8 +30,8 @@ class Node:
             'func_name': self.func_name,
             'args': {k: serialize_value(v) for k, v in self.args.items()},
             'children': [child.to_dict() for child in self.children],
-            'inputs': self.inputs,
-            'outputs': self.outputs,
+            #'inputs': self.inputs,
+            #'outputs': self.outputs,
         }
 
     def sanitize_args(self, args):
