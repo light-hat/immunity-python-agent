@@ -13,7 +13,7 @@ class CallTreeBuilder:
         self.project_root = project_root
         self.in_library_code = False
 
-    def trace_calls(self, frame, event, arg):
+    '''def trace_calls(self, frame, event, arg):
         filename = frame.f_code.co_filename
         func_name = frame.f_code.co_name
         line_no = frame.f_lineno
@@ -45,8 +45,6 @@ class CallTreeBuilder:
                 # Если вернулись в пользовательский код, сбрасываем флаг
                 self.in_library_code = False
 
-
-
             if self.project_root in filename:
                 if event == 'call':
                     func_name = frame.f_code.co_name
@@ -74,7 +72,38 @@ class CallTreeBuilder:
             print(f"Ignored AttributeError: {e}")
 
         # Возвращаем саму функцию для продолжения отслеживания
+        return self.trace_calls'''
+
+    def trace_calls(self, frame, event, arg):
+        filename = frame.f_code.co_filename
+        func_name = frame.f_code.co_name
+
+        # Пропуск кода, не относящегося к проекту
+        if not filename.startswith(self.project_root):
+            return
+
+        if func_name not in self.nodes:
+            self.nodes[func_name] = Node(func_name)
+
+        if event == 'call':
+            caller_frame = frame.f_back
+            caller_func_name = caller_frame.f_code.co_name if caller_frame else None
+
+            # Сохранение входящих переменных
+            local_vars = caller_frame.f_locals if caller_frame else {}
+            for var_name, var_value in local_vars.items():
+                self.nodes[func_name].add_input(var_name, caller_func_name)
+                if caller_func_name in self.nodes:
+                    self.nodes[caller_func_name].add_output(var_name, func_name)
+
+        elif event == 'return':
+            # Здесь можно обработать возврат, чтобы отслеживать изменения переменных
+            pass
+
         return self.trace_calls
+
+    def to_dict(self):
+        return {func_name: node.to_dict() for func_name, node in self.nodes.items()}
 
     def serialize_to_json(self):
         """Сериализует дерево вызовов в формат JSON."""

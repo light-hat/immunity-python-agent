@@ -9,9 +9,18 @@ class Node:
         self.children = []  # Дочерние узлы
         self.parent = None  # Родительский узел
 
+        self.inputs = {}   # Входящие переменные (ребра)
+        self.outputs = {}  # Исходящие переменные (ребра)
+
     def add_child(self, child):
         child.parent = self
         self.children.append(child)
+
+    def add_input(self, var_name, caller_func):
+        self.inputs[var_name] = caller_func
+
+    def add_output(self, var_name, called_func):
+        self.outputs[var_name] = called_func
 
     def to_dict(self):
         def serialize_value(value):
@@ -29,11 +38,10 @@ class Node:
         return {
             'func_name': self.func_name,
             'args': {k: serialize_value(v) for k, v in self.args.items()},
-            'children': [child.to_dict() for child in self.children]
+            'children': [child.to_dict() for child in self.children],
+            'inputs': self.inputs,
+            'outputs': self.outputs,
         }
-
-    def serialize_to_json(self):
-        return json.dumps(self.to_dict(), indent=4)
 
     def sanitize_args(self, args):
         """Обрабатывает аргументы функции, чтобы сделать их сериализуемыми в JSON."""
@@ -50,3 +58,6 @@ class Node:
 
     def __repr__(self):
         return f"Node(func_name={self.func_name}, args={self.args}, children={self.children})"
+
+    def serialize_to_json(self):
+        return json.dumps(self.to_dict(), indent=4)
