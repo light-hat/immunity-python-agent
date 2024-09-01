@@ -80,7 +80,7 @@ class CallTreeBuilder:
         source_code = inspect.getframeinfo(frame).code_context[0].strip()
 
         # Разбираем строку в AST
-        tree = ast.parse(source_code, mode='exec')
+        tree = ast.parse(source_code, mode='single')
 
         # Обходим дерево AST и извлекаем информацию о переменных и функциях
         # Для этого можно использовать ast.NodeVisitor или аналогичный метод
