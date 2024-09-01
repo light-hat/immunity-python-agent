@@ -13,6 +13,8 @@ class CallTreeBuilder:
         self.project_root = project_root
         self.in_library_code = False
 
+        self.nodes = {}
+
     '''def trace_calls(self, frame, event, arg):
         filename = frame.f_code.co_filename
         func_name = frame.f_code.co_name
