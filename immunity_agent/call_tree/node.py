@@ -9,18 +9,9 @@ class Node:
         self.children = []  # Дочерние узлы
         self.parent = None  # Родительский узел
 
-        self.inputs = {}   # Входящие переменные (ребра)
-        self.outputs = {}  # Исходящие переменные (ребра)
-
     def add_child(self, child):
         child.parent = self
         self.children.append(child)
-
-    def add_input(self, var_name, caller_func):
-        self.inputs[var_name] = caller_func
-
-    def add_output(self, var_name, called_func):
-        self.outputs[var_name] = called_func
 
     def to_dict(self):
         def serialize_value(value):
