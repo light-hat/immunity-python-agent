@@ -177,4 +177,5 @@ class CallTreeBuilder:
         labels = nx.get_node_attributes(G, 'label')
         nx.draw(G, pos, with_labels=True, labels=labels, node_size=2000, node_color='skyblue', font_size=10, font_weight='bold', edge_color='gray')
         plt.title("Call Graph")
+        plt.figure(figsize=(2048,2048))
         plt.savefig("D:\\graph.png")
