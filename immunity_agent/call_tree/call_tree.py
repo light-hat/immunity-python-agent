@@ -19,6 +19,34 @@ class CallTreeBuilder:
         line_no = frame.f_lineno
 
         try:
+
+            if not filename.startswith(self.project_root):
+                if not self.in_library_code:
+                    #######################
+                    func_name = frame.f_code.co_name
+                    args = frame.f_locals  # Локальные переменные (аргументы функции)
+
+                    # Создаем новый узел для функции
+                    new_node = Node(func_name, args)
+
+                    # Если это первый вызов, устанавливаем его корнем
+                    if not self.root is None:
+                        # Добавляем новый узел как дочерний к текущему узлу
+                        self.current_node.add_child(new_node)
+                        # Переходим к новому узлу (новый контекст)
+                        self.current_node = new_node
+                    #######################
+                    # Мы зашли в библиотечный код; устанавливаем флаг
+                    self.in_library_code = True
+                else:
+                    # Если уже в библиотечном коде, просто выходим, чтобы игнорировать дальнейшие вызовы
+                    return
+            else:
+                # Если вернулись в пользовательский код, сбрасываем флаг
+                self.in_library_code = False
+
+
+
             if self.project_root in filename:
                 if event == 'call':
                     func_name = frame.f_code.co_name

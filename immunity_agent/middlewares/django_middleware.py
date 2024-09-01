@@ -9,6 +9,7 @@ class ImmunityDjangoMiddleware:
         self.tree_builder = CallTreeBuilder(project_root=str(settings.BASE_DIR))
 
     def __call__(self, request):
+
         sys.settrace(self.tree_builder.trace_calls)
 
         response = self.get_response(request)

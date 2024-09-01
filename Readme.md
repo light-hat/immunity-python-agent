@@ -4,7 +4,35 @@ IAST-агент, встраиваемый в сканируемые прилож
 
 Поддерживаемые фреймворки:
 - `Django`
-- `Flask`
+- TODO: `Flask`
+
+Установка агента:
+
+```bash
+pip install --index-url https://gitverse.ru/api/packages/immunity_iast/pypi/simple/ immunity-python-agent
+```
+
+Обновление установленного ранее пакета:
+
+```bash
+pip install --index-url https://gitverse.ru/api/packages/immunity_iast/pypi/simple/ immunity-python-agent --upgrade
+```
+
+Интеграция установленного агента в Django-проект:
+
+```python
+INSTALLED_APPS = [
+    # ...
+    'immunity_agent'
+]
+
+MIDDLEWARE = [
+    # ...
+    'immunity_agent.middlewares.django_middleware.ImmunityDjangoMiddleware'
+]
+```
+
+
 
 Локальная сборка проекта:
 
@@ -16,16 +44,4 @@ docker build -t agent_builder .
 
 ```powershell
 .\deploy.ps1
-```
-
-Установка пакета:
-
-```bash
-pip install --index-url https://gitverse.ru/api/packages/immunity_iast/pypi/simple/ immunity-python-agent
-```
-
-Обновление установленного ранее пакета:
-
-```bash
-pip install --index-url https://gitverse.ru/api/packages/immunity_iast/pypi/simple/ immunity-python-agent --upgrade
 ```
