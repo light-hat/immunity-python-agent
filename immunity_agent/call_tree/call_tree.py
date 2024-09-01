@@ -1,5 +1,6 @@
 import sys
 import json
+import ast
 import inspect
 import traceback
 from immunity_agent.call_tree.node import Node
