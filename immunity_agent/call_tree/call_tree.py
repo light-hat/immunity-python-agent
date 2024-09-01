@@ -82,12 +82,11 @@ class CallTreeBuilder:
         # Разбираем строку в AST
         try:
             tree = ast.parse(source_code, mode='single')
+            # Обходим дерево AST и извлекаем информацию о переменных и функциях
+            # Для этого можно использовать ast.NodeVisitor или аналогичный метод
+            self.analyze_ast(tree, frame)
         except SyntaxError as e:
             print(f"SyntaxError: {e} in line: {source_code}")
-
-        # Обходим дерево AST и извлекаем информацию о переменных и функциях
-        # Для этого можно использовать ast.NodeVisitor или аналогичный метод
-        self.analyze_ast(tree, frame)
 
     #####################
 
