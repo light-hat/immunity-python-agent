@@ -22,7 +22,7 @@ class ImmunityDjangoMiddleware:
 
         #builder = DataBuilder(request, response)
         #collector = builder.build()
-        json_data = collector.serialize_to_json()
+        # = collector.serialize_to_json()
         #print(collector.serialize_to_dict())
         #print(collector.serialize_to_json())
 
