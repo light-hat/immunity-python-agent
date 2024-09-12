@@ -15,7 +15,19 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.http import HttpResponse
+
+def call_me(request):
+    a = 1
+    b = request.GET.get('a')
+    c = "CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT)"
+    e = "INSERT INTO users (name) VALUES ('John')"
+    q = a+b
+    print(e)
+
+    return HttpResponse("Hello World")
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('call_me/', call_me),
 ]
