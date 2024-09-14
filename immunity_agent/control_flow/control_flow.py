@@ -1,4 +1,5 @@
 import json
+import time
 import inspect
 import logging
 from immunity_agent.logger import logger_config
@@ -85,8 +86,8 @@ class ControlFlowBuilder:
                     module_name = module.__name__ if module else "<Unknown>"
                     args = frame.f_locals.copy()
                     self.control_flow.append({
-                        "event": "function",
-                        "type": "external_call",
+                        "timestamp": time.strftime('%Y-%m-%d %H:%M:%S'),
+                        "event": "external_call",
                         "name": func_name,
                         "module": module_name,
                         "filename": func_filename,
@@ -106,8 +107,8 @@ class ControlFlowBuilder:
                 module_name = module.__name__ if module else "<Unknown>"
                 args = frame.f_locals.copy()
                 self.control_flow.append({
-                    "event": "function",
-                    "type": "internal_call",
+                    "timestamp": time.strftime('%Y-%m-%d %H:%M:%S'),
+                    "event": "internal_call",
                     "name": func_name,
                     "module": module_name,
                     "filename": func_filename,
@@ -128,8 +129,8 @@ class ControlFlowBuilder:
                 module_name = module.__name__ if module else "<Unknown>"
                 args = frame.f_locals.copy()
                 self.control_flow.append({
-                    "event": "code",
-                    "type": "execution",
+                    "timestamp": time.strftime('%Y-%m-%d %H:%M:%S'),
+                    "event": "code_line",
                     "name": func_name,
                     "module": module_name,
                     "filename": func_filename,
@@ -151,8 +152,8 @@ class ControlFlowBuilder:
                 module_name = module.__name__ if module else "<Unknown>"
                 args = frame.f_locals.copy()
                 self.control_flow.append({
-                    "event": "code",
-                    "type": "execution",
+                    "timestamp": time.strftime('%Y-%m-%d %H:%M:%S'),
+                    "event": "return",
                     "name": func_name,
                     "module": module_name,
                     "filename": func_filename,
@@ -173,8 +174,8 @@ class ControlFlowBuilder:
                 module_name = module.__name__ if module else "<Unknown>"
                 args = frame.f_locals.copy()
                 self.control_flow.append({
+                    "timestamp": time.strftime('%Y-%m-%d %H:%M:%S'),
                     "event": "error",
-                    "type": "exception",
                     "source": [{
                         "function": func_name,
                         "module": module_name,
