@@ -1,7 +1,6 @@
 import json
 import time
 import inspect
-import logging
 from immunity_agent.logger import logger_config
 
 

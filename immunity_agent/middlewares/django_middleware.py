@@ -36,9 +36,9 @@ class ImmunityDjangoMiddleware:
 
         sys.settrace(None)
 
-        #print(DjangoRequest.serialize(request)) # DEBUG PRINT
-        #print(self.control_flow.serialize()) # DEBUG PRINT
-        #print(DjangoResponse.serialize(response)) # DEBUG PRINT
+        print(DjangoRequest.serialize(request)) # DEBUG PRINT
+        print(self.control_flow.serialize()) # DEBUG PRINT
+        print(DjangoResponse.serialize(response)) # DEBUG PRINT
 
         self.api_client.upload_context(
             request.path,
