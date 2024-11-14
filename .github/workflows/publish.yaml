@@ -25,4 +25,4 @@ jobs:
           TWINE_PASSWORD: ${{ secrets.PWD }}
         run: |
           pip install --user --upgrade twine
-          python3 -m twine upload dist/* --repository immunity_iast --verbose
+          python3 -m twine upload dist/*
