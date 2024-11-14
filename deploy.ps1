@@ -4,7 +4,7 @@ git fetch origin --tags
 git pull origin
 
 $major = 0
-$minor = 0
+$minor = 1
 $(git describe --tags $(git rev-list --tags --max-count=1)) -match "[0-9]+\.[0-9]+\.([0-9]+)"
 $patch = [int]$Matches[1] + 1
 $version = "$($major).$($minor).$($patch)"
