@@ -1,11 +1,11 @@
-name: Сборка Python-библиотеки
+name: Сборка Python-агента
 on:
   push:
     tags:
       - '[0-9]+\.[0-9]+\.[0-9]+'
 jobs:
   build-test:
-    name: Build immunity agent
+    name: Build Immunity Python agent
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -25,4 +25,4 @@ jobs:
       - name: Публикуем библиотеку
         run: |
           pip install --user --upgrade twine
-          python3 -m twine upload dist/* -u l1ghth4t -p ${{ secrets.PWD }} --repository-url https://gitverse.ru/api/packages/immunity_iast/pypi
+          python3 -m twine upload dist/* -u ${{ secrets.USR }} -p ${{ secrets.PWD }} --repository immunity_iast
