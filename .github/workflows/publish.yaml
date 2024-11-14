@@ -22,4 +22,4 @@ jobs:
       - name: Публикуем библиотеку
         run: |
           pip install --user --upgrade twine
-          python3 -m twine upload dist/* -u ${{ secrets.USR }} -p ${{ secrets.PWD }}
+          python3 -m twine upload dist/* -u ${{ secrets.USR }} -p ${{ secrets.PWD }} --repository immunity_iast
