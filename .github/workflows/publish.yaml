@@ -20,6 +20,9 @@ jobs:
           python3 -m pip install --upgrade build
           python3 -m build
       - name: Публикуем библиотеку
+        env:
+          TWINE_USERNAME: ${{ secrets.USR }}
+          TWINE_PASSWORD: ${{ secrets.PWD }}
         run: |
           pip install --user --upgrade twine
-          python3 -m twine upload dist/* -u ${{ secrets.USR }} -p ${{ secrets.PWD }} --repository immunity_iast --verbose
+          python3 -m twine upload dist/* --repository immunity_iast --verbose
