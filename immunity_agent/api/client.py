@@ -21,8 +21,9 @@ class Client:
         """
         Загрузка контекста в API.
         """
-        url = f'http://{self.host}:{self.port}/api/agent/upload'
+        url = f'http://{self.host}:{self.port}/api/agent/context/'
         headers = {'Content-Type': 'application/json'}
+
         response = requests.post(url, headers=headers, json={
             'project': project,
             'request': base64.b64encode(request.encode('utf-8')).decode('utf-8'),
@@ -32,5 +33,5 @@ class Client:
         if response.status_code == 200:
             logger.info(f'Данные о запросе {id} отправлены на обработку.')
         else:
-            logger.error(f'Сбой отправки данных о запросе {id}.')
+            logger.error(f'Сбой отправки данных о запросе {id}. Код ответа: {response.status_code}; Содержимое ответа: {response.text}')
         return response
