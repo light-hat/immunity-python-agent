@@ -1,11 +1,22 @@
+"""
+Модуль, отвечающий за запуск агента из консоли.
+
+Парсит аргументы командной строки, устанавливает конфигурацию агента,
+выводит новую конфигурацию на экран.
+"""
+
 import argparse
+
 from immunity_agent.config import Config
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser('Immunity IAST Python agent. Вызов из консоли используется для конфигурации агента.')
-    parser.add_argument('host', help='Хост серверной части IAST')
-    parser.add_argument('port', help='Порт, на котором она хостится')
-    parser.add_argument('project_name', help='Имя проекта')
+if __name__ == "__main__":
+
+    parser = argparse.ArgumentParser(
+        "Immunity IAST Python agent. Вызов из консоли используется для конфигурации агента."
+    )
+    parser.add_argument("host", help="Хост серверной части IAST")
+    parser.add_argument("port", help="Порт, на котором она хостится")
+    parser.add_argument("project_name", help="Имя проекта")
     args = parser.parse_args()
 
     config = Config()

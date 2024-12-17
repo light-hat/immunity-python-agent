@@ -13,21 +13,24 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
-from django.urls import path
 from django.http import HttpResponse
+from django.urls import path
+
 
 def call_me(request):
     a = 1
-    b = request.GET.get('a')
+    b = request.GET.get("a")
     c = "CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT)"
     e = "INSERT INTO users (name) VALUES ('John')"
-    q = a+b
+    q = a + b
     print(e)
 
     return HttpResponse("Hello World")
 
+
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('call_me/', call_me),
+    path("admin/", admin.site.urls),
+    path("call_me/", call_me),
 ]

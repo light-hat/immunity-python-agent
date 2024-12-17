@@ -1,0 +1,2 @@
+[bandit]
+exclude = test_flask.py,dev/settings.py
