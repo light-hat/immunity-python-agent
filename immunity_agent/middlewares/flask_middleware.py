@@ -1,3 +1,7 @@
+import sys
+import json
+from immunity_agent.api.client import Client
+from immunity_agent.control_flow import ControlFlowBuilder
 from immunity_agent.logger import logger_config
 
 logger = logger_config("Immunity Flask middleware")
@@ -6,17 +10,21 @@ class ImmunityFlaskMiddleware:
     """
     Промежуточное ПО для инструментирования фреймворка Flask.
     """
-    def __init__(self, app):
+    def __init__(self, app, base_path):
         """
         Конструктор.
         """
         self.app = app
+        self.base_path = base_path
+        self.api_client = Client()
+        self.project = self.api_client.project
+        logger.info('Агент Immunity IAST активирован.')
 
     def __call__(self, environ, start_response):
         # Перехват входящего запроса
         request_info = self._capture_request(environ)
-        print("==== Incoming Request ====")
-        print(request_info)
+        #print("==== Incoming Request ====")
+        #print(request_info)
 
         # Буфер для записи ответа
         response_body = []
@@ -27,6 +35,9 @@ class ImmunityFlaskMiddleware:
             self.headers = headers
             # Передача управления оригинальному start_response
             return start_response(status, headers, exc_info)
+
+        self.control_flow = ControlFlowBuilder(project_root=str(self.base_path))
+        sys.settrace(self.control_flow.trace_calls)
 
         # Вызов приложения с модифицированным start_response
         app_iter = self.app(environ, custom_start_response)
@@ -44,8 +55,16 @@ class ImmunityFlaskMiddleware:
         # Анализируем полный ответ (после сборки всего тела)
         response_data = b"".join(response_body)
         response_info = self._capture_response(self.status, self.headers, response_data)
-        print("==== Outgoing Response ====")
-        print(response_info)
+        #print("==== Outgoing Response ====")
+        #print(response_info)
+
+        self.api_client.upload_context(
+            request_info["path"],
+            self.project,
+            json.dumps(request_info),
+            self.control_flow.serialize(),
+            json.dumps(response_info)
+        )
 
     def _capture_request(self, environ):
         """

@@ -35,17 +35,20 @@ class ControlFlowBuilder:
         :return: Словарь с сериализованными переменными.
         """
         serialized = []
-        for var_name, var_value in local_dict.items():
-            try:
-                value_str = str(var_value)
-            except Exception:
-                value_str = "<non-serializable>"
+        try:
+            for var_name, var_value in local_dict.items():
+                try:
+                    value_str = str(var_value)
+                except Exception:
+                    value_str = "<non-serializable>"
 
-            serialized.append({
-                "name": var_name,
-                "type": type(var_value).__name__,
-                "value": value_str if value_str else "<Non-serializable>"
-            })
+                serialized.append({
+                    "name": var_name,
+                    "type": type(var_value).__name__,
+                    "value": value_str if value_str else "<Non-serializable>"
+                })
+        except Exception:
+            serialized.append(str(local_dict))
         return serialized
 
     def serialize_error(self, error_tuple):
