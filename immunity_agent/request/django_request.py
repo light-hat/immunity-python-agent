@@ -1,5 +1,4 @@
 import json
-import logging
 from immunity_agent.logger import logger_config
 
 

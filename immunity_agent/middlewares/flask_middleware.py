@@ -13,39 +13,39 @@ class ImmunityFlaskMiddleware:
         self.app = app
 
     def __call__(self, environ, start_response):
-        """
-        Переопределяем метод вызова.
-        :param environ:
-        :param start_response:
-        :return: Ответ.
-        """
         # Перехват входящего запроса
         request_info = self._capture_request(environ)
-        logger.info("==== Incoming Request ====")
-        logger.info(request_info)
+        print("==== Incoming Request ====")
+        print(request_info)
 
-        # Обертка для захвата ответа
+        # Буфер для записи ответа
         response_body = []
 
         def custom_start_response(status, headers, exc_info=None):
-            # Сохранение данных о статусе и заголовках ответа
+            # Сохранение данных о статусе и заголовках
             self.status = status
             self.headers = headers
-            return lambda data: response_body.append(data)
+            # Передача управления оригинальному start_response
+            return start_response(status, headers, exc_info)
 
-        # Передача управления приложению
+        # Вызов приложения с модифицированным start_response
         app_iter = self.app(environ, custom_start_response)
 
-        # Сбор ответа из app_iter
-        response_body.extend(app_iter)
+        try:
+            # Сбор ответа из app_iter
+            for data in app_iter:
+                response_body.append(data)
+                yield data
+        finally:
+            # Закрываем итератор, если он поддерживает метод close()
+            if hasattr(app_iter, 'close'):
+                app_iter.close()
+
+        # Анализируем полный ответ (после сборки всего тела)
         response_data = b"".join(response_body)
-
-        # Анализ ответа
         response_info = self._capture_response(self.status, self.headers, response_data)
-        logger.info("==== Outgoing Response ====")
-        logger.info(response_info)
-
-        return [response_data]
+        print("==== Outgoing Response ====")
+        print(response_info)
 
     def _capture_request(self, environ):
         """
@@ -62,6 +62,7 @@ class ImmunityFlaskMiddleware:
         # Чтение тела запроса
         try:
             request_body = environ["wsgi.input"].read(int(environ.get("CONTENT_LENGTH", 0) or 0))
+            environ["wsgi.input"] = self._reset_stream(request_body)  # Сохраняем поток
             request_info["body"] = request_body.decode("utf-8")
         except Exception:
             request_info["body"] = None
@@ -83,3 +84,10 @@ class ImmunityFlaskMiddleware:
         Извлечение заголовков из WSGI environ.
         """
         return {key[5:]: value for key, value in environ.items() if key.startswith("HTTP_")}
+
+    def _reset_stream(self, body):
+        """
+        Восстанавливает wsgi.input поток после чтения.
+        """
+        from io import BytesIO
+        return BytesIO(body)
