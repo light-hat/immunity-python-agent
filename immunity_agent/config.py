@@ -6,8 +6,10 @@
 хранятся в файле JSON.
 """
 
+import os
 import json
 from typing import Any, Dict, Optional
+from pathlib import Path
 
 from immunity_agent.logger import logger_config
 
@@ -29,7 +31,8 @@ class Config:
         Устанавливает имя файла конфигурации и загружает данные из этого файла.
         Если файл отсутствует, создается пустой словарь данных.
         """
-        self.filename = "immunity_agent/config.json"
+        package_dir = os.path.dirname(__file__)
+        self.filename = os.path.join(package_dir, "config.json")
         self.data: Dict[str, Any] = self.load()
 
     def load(self) -> Dict[str, Any]:
@@ -50,7 +53,7 @@ class Config:
         """
         Сохраняет текущие данные конфигурации в файл.
         """
-        with open(self.filename, "w+", encoding="utf-8") as f:
+        with open(self.filename, "w", encoding="utf-8") as f:
             json.dump(self.data, f)
 
     def get(self, key: str, default: Optional[Any] = None) -> Any:
