@@ -114,13 +114,13 @@ class ControlFlowBuilder:
         """
         filename = frame.f_code.co_filename
 
-        '''if event == "call":
+        if event == "call":
             func_name = frame.f_code.co_name
             func_filename = frame.f_code.co_filename
             func_line_number = frame.f_lineno
 
             # Проверяем, если вызов происходит в проекте
-            if self.project_root in func_filename:
+            if self.project_root in func_filename and not 'site-packages' in func_filename:
                 self.external_call_detected = False
             else:
                 if not self.external_call_detected:
@@ -141,9 +141,9 @@ class ControlFlowBuilder:
                     )
                     self.external_call_detected = True
                 else:
-                    self.external_call_detected = False'''
+                    self.external_call_detected = False
 
-        if self.project_root in filename:
+        if self.project_root in filename and not 'site-packages' in filename:
             if event == "call":
                 # Вызов функции
                 func_name = frame.f_code.co_name
