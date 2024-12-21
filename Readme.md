@@ -8,11 +8,15 @@ IAST-агент, встраиваемый в сканируемые прилож
 
 ## Установка
 
+Выполните команду в терминале:
+
 ```bash
 pip install --index-url https://gitverse.ru/api/packages/immunity_iast/pypi/simple/ immunity-python-agent
 ```
 
 ## Обновление
+
+Выполните команду в терминале:
 
 ```bash
 pip install --index-url https://gitverse.ru/api/packages/immunity_iast/pypi/simple/ immunity-python-agent --upgrade
@@ -20,11 +24,13 @@ pip install --index-url https://gitverse.ru/api/packages/immunity_iast/pypi/simp
 
 ## Конфигурирование
 
+Выполните команду в терминале:
+
 ```bash
 python3 -m immunity_agent 127.0.0.1 80 test
 ```
 
-Вызов через шелл, в качестве аргументов передаём хост и порт серверной части и имя проекта, ранее созданного на сервере.
+В качестве аргументов передаём хост и порт серверной части и имя проекта, ранее созданного на сервере.
 
 ## Интеграция в Django
 
