@@ -50,7 +50,7 @@ class Config:
         """
         Сохраняет текущие данные конфигурации в файл.
         """
-        with open(self.filename, "w", encoding="utf-8") as f:
+        with open(self.filename, "w+", encoding="utf-8") as f:
             json.dump(self.data, f)
 
     def get(self, key: str, default: Optional[Any] = None) -> Any:
