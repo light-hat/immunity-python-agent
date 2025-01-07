@@ -24,7 +24,7 @@ jobs:
           node-version: '18.x'
 
       - name: Install diagrams package
-        run: npm install diagrams
+        run: npm install -g diagrams
 
       - name: Install dependencies
         run: |
