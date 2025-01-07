@@ -57,7 +57,7 @@ jobs:
 
       - name: Flowcharts to png
         run: |
-          for file in diagrams/*.txt; do diagrams flowchart "$file" "${file%.txt}.svg"; done
+          for file in diagrams/*.txt; do DISPLAY=:99 diagrams flowchart "$file" "${file%.txt}.svg"; done
 
       - name: Stage new files
         run: git add .
