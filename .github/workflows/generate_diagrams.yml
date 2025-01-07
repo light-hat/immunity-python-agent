@@ -24,6 +24,10 @@ jobs:
           sudo apt install -y graphviz
           pip install pylint 
 
+      - name: Cleanup old schemes
+        run: |
+          rm -rf diagrams/*
+
       - name: Run Python scripts
         run: |
           pyreverse --output-directory diagrams/ -f ALL immunity_agent/
