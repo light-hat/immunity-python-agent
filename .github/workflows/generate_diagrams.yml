@@ -30,6 +30,7 @@ jobs:
         run: |
           Xvfb :99 -screen 0 1024x768x24 &
           export DISPLAY=:99
+          export XVFB_PID=$!
 
       - name: Install diagrams package
         run: npm install -g diagrams
@@ -53,7 +54,7 @@ jobs:
 
       - name: Generate flowcharts as txt
         run: |
-          python3 generate_flowcharts.py || true
+          python3 generate_flowcharts.py
 
       - name: Flowcharts to png
         run: |
@@ -72,6 +73,3 @@ jobs:
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Stop XVFB
-        run: kill $!
