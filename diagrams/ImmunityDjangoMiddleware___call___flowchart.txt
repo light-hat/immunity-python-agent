@@ -1,0 +1,10 @@
+op18=>operation: self.control_flow = ControlFlowBuilder(project_root=str(settings.BASE_DIR))
+sub20=>subroutine: sys.settrace(self.control_flow.trace_calls)
+op22=>operation: response = self.get_response(request)
+sub24=>subroutine: sys.settrace(None)
+sub26=>subroutine: self.api_client.upload_context(request.path, self.project, DjangoRequest.serialize(request), self.control_flow.serialize(), DjangoResponse.serialize(response))
+
+op18->sub20
+sub20->op22
+op22->sub24
+sub24->sub26
