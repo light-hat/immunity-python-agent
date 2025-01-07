@@ -30,6 +30,10 @@ jobs:
           dot -Tpng diagrams/classes.dot -o diagrams/classes.png
           dot -Tpng diagrams/packages.dot -o diagrams/packages.png
 
+      - name: Turn diagrams to black/white
+        run: |
+          find diagrams/ -name '*.dot' -exec sed -i 's/green/black/g' {} +
+
       - name: Stage new files
         run: git add .
 
