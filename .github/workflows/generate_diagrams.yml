@@ -1,0 +1,43 @@
+name: Generate Images Pipeline
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  generate-images:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          apt update && apt install graphviz
+          pip install pylint 
+
+      - name: Run Python scripts
+        run: |
+          pyreverse --project immunity_agent/ --output-directory diagrams/
+          dot -Tpng diagrams/classes.dot -o diagrams/classes.png
+
+      - name: Stage new files
+        run: git add .
+
+      - name: Commit changes
+        run: |
+          git config user.name ${{ secrets.GIT_NAME }}
+          git config user.email ${{ secrets.GIT_EMAIL }}
+          git commit -m "auto: generated schemes" || echo "No changes to commit"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
