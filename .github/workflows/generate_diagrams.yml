@@ -43,9 +43,12 @@ jobs:
           dot -Tpng diagrams/classes.dot -o diagrams/classes.png
           dot -Tpng diagrams/packages.dot -o diagrams/packages.png
 
-      - name: Generate flowcharts
+      - name: Generate flowcharts as txt
         run: |
-          python3 generate_flowcharts.py
+          python3 generate_flowcharts.py || true
+
+      - name: Flowcharts to png
+        run: |
           for file in diagrams/*.txt; do diagrams flowchart "$file" "${file%.txt}.svg"; done
 
       - name: Stage new files
