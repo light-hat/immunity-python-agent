@@ -20,7 +20,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          apt update && apt install -y graphviz
+          sudo apt update
+          sudo apt install -y graphviz
           pip install pylint 
 
       - name: Run Python scripts
