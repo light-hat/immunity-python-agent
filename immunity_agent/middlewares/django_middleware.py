@@ -57,7 +57,8 @@ class ImmunityDjangoMiddleware:  # pylint: disable=too-few-public-methods
         :return: Ответ.
         :rtype: HttpResponse
         """
-        logger.info(f"Отслеживаю запрос {request.path}")
+        # flowchart: start
+        logger.info(f"Отслеживаю запрос {request.path}") # flowchart: start
         self.control_flow = ControlFlowBuilder(project_root=str(settings.BASE_DIR))
         sys.settrace(self.control_flow.trace_calls)
 
@@ -72,5 +73,6 @@ class ImmunityDjangoMiddleware:  # pylint: disable=too-few-public-methods
             self.control_flow.serialize(),
             DjangoResponse.serialize(response),
         )
+        # flowchart: end
 
         return response

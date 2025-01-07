@@ -10,7 +10,6 @@ import argparse
 from immunity_agent.config import Config
 
 if __name__ == "__main__":
-
     parser = argparse.ArgumentParser(
         "Immunity IAST Python agent. Вызов из консоли используется для конфигурации агента."
     )
@@ -22,7 +21,7 @@ if __name__ == "__main__":
     config = Config()
     config.set("host", args.host)
     config.set("port", args.port)
-    config.set("project", args.project_name)
+    config.set("project", args.project_name) # flowchart: end
 
     print("Новая конфигурация:")
     print("Хост серверной части:", args.host)

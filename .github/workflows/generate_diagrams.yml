@@ -1,9 +1,9 @@
 name: Generate Images Pipeline
 
 on:
-  push:
+  pull_request:
     branches:
-      - master
+      - 'master'
 
 jobs:
   generate-images:
@@ -18,11 +18,19 @@ jobs:
         with:
           python-version: '3.x'
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+
+      - name: Install diagrams package
+        run: npm install diagrams
+
       - name: Install dependencies
         run: |
           sudo apt update
           sudo apt install -y graphviz
-          pip install pylint 
+          pip install pylint pyflowchart graphviz
 
       - name: Cleanup old schemes
         run: |
@@ -34,6 +42,11 @@ jobs:
           find diagrams/ -name '*.dot' -exec sed -i 's/green/black/g' {} +
           dot -Tpng diagrams/classes.dot -o diagrams/classes.png
           dot -Tpng diagrams/packages.dot -o diagrams/packages.png
+
+      - name: Generate flowcharts
+        run: |
+          python3 generate_flowcharts.py
+          for file in diagrams/*.txt; do diagrams flowchart "$file" "${file%.txt}.svg"; done
 
       - name: Stage new files
         run: git add .

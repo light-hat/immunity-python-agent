@@ -72,6 +72,8 @@ class Client:  # pylint: disable=too-few-public-methods
         headers = {"Content-Type": "application/json"}
 
         try:
+            # flowchart: start
+            # Отправляем запрос
             response = requests.post(
                 url,
                 headers=headers,
@@ -97,7 +99,7 @@ class Client:  # pylint: disable=too-few-public-methods
                     f"Код ответа: {response.status_code}; "
                     f"Содержимое ответа: {response.text}"
                 )
-            return response
+            return response # flowchart: end
         except requests.exceptions.RequestException as e:
             logger.exception(
                 f"Произошла ошибка при отправке данных о запросе {endpoint}"
