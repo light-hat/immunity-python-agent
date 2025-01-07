@@ -26,7 +26,7 @@ jobs:
 
       - name: Run Python scripts
         run: |
-          pyreverse --output-directory diagrams/ immunity_agent/
+          pyreverse --output-directory diagrams/ -f ALL immunity_agent/
           dot -Tpng diagrams/classes.dot -o diagrams/classes.png
           dot -Tpng diagrams/packages.dot -o diagrams/packages.png
 
