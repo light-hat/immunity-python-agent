@@ -60,6 +60,11 @@ jobs:
         run: |
           for file in diagrams/*.txt; do DISPLAY=:99 diagrams flowchart "$file" "${file%.txt}.svg"; done
 
+      - name: Generate Dockerfile diagram
+        run: | 
+          sudo docker run --rm --user "$(id -u):$(id -g)" --workdir /workspace --volume "$(pwd)":/workspace ghcr.io/patrickhoefler/dockerfilegraph:alpine -o png -f Dockerfile --layers --legend
+          mv Dockerfile.png diagrams/.
+
       - name: Stage new files
         run: git add .
 
