@@ -1,0 +1,35 @@
+digraph "packages" {
+rankdir=BT
+charset="utf-8"
+"immunity_agent" [color="black", label=<immunity_agent>, shape="box", style="solid"];
+"immunity_agent.__main__" [color="black", label=<immunity_agent.__main__>, shape="box", style="solid"];
+"immunity_agent.api" [color="black", label=<immunity_agent.api>, shape="box", style="solid"];
+"immunity_agent.api.client" [color="black", label=<immunity_agent.api.client>, shape="box", style="solid"];
+"immunity_agent.config" [color="black", label=<immunity_agent.config>, shape="box", style="solid"];
+"immunity_agent.control_flow" [color="black", label=<immunity_agent.control_flow>, shape="box", style="solid"];
+"immunity_agent.control_flow.control_flow" [color="black", label=<immunity_agent.control_flow.control_flow>, shape="box", style="solid"];
+"immunity_agent.logger" [color="black", label=<immunity_agent.logger>, shape="box", style="solid"];
+"immunity_agent.middlewares" [color="black", label=<immunity_agent.middlewares>, shape="box", style="solid"];
+"immunity_agent.middlewares.django_middleware" [color="black", label=<immunity_agent.middlewares.django_middleware>, shape="box", style="solid"];
+"immunity_agent.middlewares.flask_middleware" [color="black", label=<immunity_agent.middlewares.flask_middleware>, shape="box", style="solid"];
+"immunity_agent.request" [color="black", label=<immunity_agent.request>, shape="box", style="solid"];
+"immunity_agent.request.django_request" [color="black", label=<immunity_agent.request.django_request>, shape="box", style="solid"];
+"immunity_agent.response" [color="black", label=<immunity_agent.response>, shape="box", style="solid"];
+"immunity_agent.response.django_response" [color="black", label=<immunity_agent.response.django_response>, shape="box", style="solid"];
+"immunity_agent.__main__" -> "immunity_agent.config" [arrowhead="open", arrowtail="none"];
+"immunity_agent.api.client" -> "immunity_agent.config" [arrowhead="open", arrowtail="none"];
+"immunity_agent.api.client" -> "immunity_agent.logger" [arrowhead="open", arrowtail="none"];
+"immunity_agent.config" -> "immunity_agent.logger" [arrowhead="open", arrowtail="none"];
+"immunity_agent.control_flow" -> "immunity_agent.control_flow" [arrowhead="open", arrowtail="none"];
+"immunity_agent.control_flow.control_flow" -> "immunity_agent.logger" [arrowhead="open", arrowtail="none"];
+"immunity_agent.middlewares.django_middleware" -> "immunity_agent.api.client" [arrowhead="open", arrowtail="none"];
+"immunity_agent.middlewares.django_middleware" -> "immunity_agent.control_flow" [arrowhead="open", arrowtail="none"];
+"immunity_agent.middlewares.django_middleware" -> "immunity_agent.logger" [arrowhead="open", arrowtail="none"];
+"immunity_agent.middlewares.django_middleware" -> "immunity_agent.request.django_request" [arrowhead="open", arrowtail="none"];
+"immunity_agent.middlewares.django_middleware" -> "immunity_agent.response.django_response" [arrowhead="open", arrowtail="none"];
+"immunity_agent.middlewares.flask_middleware" -> "immunity_agent.api.client" [arrowhead="open", arrowtail="none"];
+"immunity_agent.middlewares.flask_middleware" -> "immunity_agent.control_flow" [arrowhead="open", arrowtail="none"];
+"immunity_agent.middlewares.flask_middleware" -> "immunity_agent.logger" [arrowhead="open", arrowtail="none"];
+"immunity_agent.request.django_request" -> "immunity_agent.logger" [arrowhead="open", arrowtail="none"];
+"immunity_agent.response.django_response" -> "immunity_agent.logger" [arrowhead="open", arrowtail="none"];
+}

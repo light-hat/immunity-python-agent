@@ -25,8 +25,9 @@ jobs:
 
       - name: Run Python scripts
         run: |
-          pyreverse --project immunity_agent/ --output-directory diagrams/
+          pyreverse --output-directory diagrams/ immunity_agent/
           dot -Tpng diagrams/classes.dot -o diagrams/classes.png
+          dot -Tpng diagrams/packages.dot -o diagrams/packages.png
 
       - name: Stage new files
         run: git add .
