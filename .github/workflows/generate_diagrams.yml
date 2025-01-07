@@ -23,6 +23,14 @@ jobs:
         with:
           node-version: '18.x'
 
+      - name: Install XVFB
+        run: sudo apt-get update && sudo apt-get install -y xvfb
+
+      - name: Start XVFB
+        run: |
+          Xvfb :99 -screen 0 1024x768x24 &
+          export DISPLAY=:99
+
       - name: Install diagrams package
         run: npm install -g diagrams
 
@@ -64,3 +72,6 @@ jobs:
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Stop XVFB
+        run: kill $!
