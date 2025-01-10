@@ -6,10 +6,11 @@
 """
 
 import sys
+import json
 from typing import Any
 
 from django.conf import settings
-
+import pkg_resources
 from immunity_agent.api.client import Client
 from immunity_agent.control_flow import ControlFlowBuilder
 from immunity_agent.logger import logger_config
@@ -46,6 +47,9 @@ class ImmunityDjangoMiddleware:  # pylint: disable=too-few-public-methods
         self.control_flow = None
         logger.info("Агент Immunity IAST активирован.")
 
+        self.api_client.upload_config(json.dumps(self._extract_settings()), self.project, "django")
+        self.api_client.upload_dependencies(json.dumps({d.key: d.version for d in pkg_resources.working_set}), self.project)
+
     def __call__(self, request: Any) -> Any:
         """
         Переопределяем метод вызова.
@@ -76,3 +80,18 @@ class ImmunityDjangoMiddleware:  # pylint: disable=too-few-public-methods
         # flowchart: end
 
         return response
+
+    def _extract_settings(self):
+        """
+        Динамически извлекает настройки из Django-проекта.
+        :return: Словарь с настройками.
+        """
+        settings_dict = {
+            setting: getattr(settings, setting)
+            for setting in dir(settings)
+            if setting.isupper()
+        }
+
+        # Форматируем в строку
+        settings_dict = {key: str(value) for key, value in settings_dict.items()}
+        return settings_dict

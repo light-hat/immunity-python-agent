@@ -4,7 +4,7 @@ from flask import jsonify, request
 from immunity_agent.middlewares.flask_middleware import ImmunityFlaskMiddleware
 
 app = flask.Flask(__name__)
-app.wsgi_app = ImmunityFlaskMiddleware(app.wsgi_app, app.root_path)
+app.wsgi_app = ImmunityFlaskMiddleware(app.wsgi_app, app)
 
 users = [
     {"id": 1, "name": "Иван Иванов", "email": "ivan@example.com"},

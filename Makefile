@@ -1,12 +1,12 @@
 all: django
 
 config:
-	python -m immunity_agent -h
+	python3 -m immunity_agent -h
 
 django:
-	python manage.py runserver
+	python3 manage.py runserver
 
 flask:
-	python test_flask.py
+	python3 test_flask.py
 
 .PHONY: django flask

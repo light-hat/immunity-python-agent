@@ -12,8 +12,4 @@ RUN python3 -m pip install --upgrade build
 
 RUN python3 -m build --sdist --wheel
 
-RUN ls -la dist | grep agent && echo "PACKAGE FOUND!"
-
 RUN pip install dist/*.tar.gz
-
-RUN pip freeze | grep immunity-python-agent && echo "AGENT FOUND!"

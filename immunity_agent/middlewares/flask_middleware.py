@@ -10,6 +10,7 @@ import sys
 from io import BytesIO
 from typing import Any, Dict, List, Tuple
 from urllib.parse import parse_qs
+import pkg_resources
 
 from immunity_agent.api.client import Client
 from immunity_agent.control_flow import ControlFlowBuilder
@@ -32,7 +33,7 @@ class ImmunityFlaskMiddleware:  # pylint: disable=too-few-public-methods
     :type base_path: str
     """
 
-    def __init__(self, app: object, base_path: str):
+    def __init__(self, app: object, app_object: object):
         """
         Конструктор класса.
 
@@ -44,13 +45,16 @@ class ImmunityFlaskMiddleware:  # pylint: disable=too-few-public-methods
         :type base_path: str
         """
         self.app = app
-        self.base_path = base_path
+        self.base_path = app_object.root_path
         self.api_client = Client()
         self.project = self.api_client.project
         self.status = None
         self.headers = None
         self.control_flow = None
         logger.info("Агент Immunity IAST активирован.")
+
+        self.api_client.upload_config(json.dumps({key: str(value) for key, value in app_object.config.items()}), self.project, "flask")
+        self.api_client.upload_dependencies(json.dumps({d.key: d.version for d in pkg_resources.working_set}), self.project)
 
     def __call__(self, environ: Dict[str, str], start_response: callable) -> bytes:
         """
