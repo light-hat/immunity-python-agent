@@ -1,0 +1,8 @@
+op34=>operation: response = requests.post(url, headers=headers, json={'project': project, 'payload': base64.b64encode(config_json.encode('utf-8')).decode('utf-8'), 'framework': framework}, timeout=15)
+cond37=>condition: if (response.status_code == 200)
+sub41=>subroutine: logger.info(f'Данные о настройках успешно отправлены.')
+sub45=>subroutine: logger.error(f'Сбой отправки данных о настройкахКод ответа: {response.status_code}; Содержимое ответа: {response.text}')
+
+op34->cond37
+cond37(yes)->sub41
+cond37(no)->sub45
