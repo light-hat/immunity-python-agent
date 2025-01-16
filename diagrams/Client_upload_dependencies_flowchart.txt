@@ -1,0 +1,8 @@
+op18=>operation: response = requests.post(url, headers=headers, json={'project': project, 'payload': base64.b64encode(dependencies_json.encode('utf-8')).decode('utf-8')}, timeout=15)
+cond21=>condition: if (response.status_code == 200)
+sub25=>subroutine: logger.info(f'Данные о настройках успешно отправлены.')
+sub29=>subroutine: logger.error(f'Сбой отправки данных о настройкахКод ответа: {response.status_code}; Содержимое ответа: {response.text}')
+
+op18->cond21
+cond21(yes)->sub25
+cond21(no)->sub29
