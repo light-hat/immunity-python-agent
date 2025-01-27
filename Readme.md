@@ -11,7 +11,7 @@ IAST-агент, встраиваемый в сканируемые прилож
 Выполните команду в терминале:
 
 ```bash
-pip install --index-url https://gitverse.ru/api/packages/immunity_iast/pypi/simple/ immunity-python-agent
+pip install immunity-iast
 ```
 
 ## Обновление
@@ -19,7 +19,7 @@ pip install --index-url https://gitverse.ru/api/packages/immunity_iast/pypi/simp
 Выполните команду в терминале:
 
 ```bash
-pip install --index-url https://gitverse.ru/api/packages/immunity_iast/pypi/simple/ immunity-python-agent --upgrade
+pip install immunity-iast --upgrade
 ```
 
 ## Конфигурирование
