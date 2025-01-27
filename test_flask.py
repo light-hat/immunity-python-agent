@@ -1,6 +1,7 @@
 import flask
 from flask import jsonify, request
-
+import pickle
+import yaml
 from immunity_agent.middlewares.flask_middleware import ImmunityFlaskMiddleware
 
 app = flask.Flask(__name__)
@@ -59,6 +60,41 @@ def delete_user(id):
     del users[found_index]
     return "", 204
 
+@app.route('/deserialize/1/', methods=['POST'])
+def vulnerable_route_1():
+    data = request.form['data'].encode()
+
+    # Проверяем длину данных
+    if len(data) == 0:
+        return "No data provided."
+
+    # Десериализуем данные с помощью pickle
+    try:
+        deserialized_data = pickle.loads(data)
+    except EOFError:
+        return "Invalid or incomplete data."
+
+    return f'Deserialized data: {deserialized_data}'
+
+@app.route('/deserialize/2/', methods=['POST'])
+def vulnerable_route_2():
+    data = request.form['data']
+    # Десериализуем данные с помощью yaml
+    deserialized_data = yaml.load(data, Loader=yaml.FullLoader)
+    return f'Deserialized data: {deserialized_data}'
+
+class VulnerableObject:
+    def __reduce__(self):
+        return (eval, ("__import__('os').system('ls')",))
+
+@app.route('/deserialize/3/', methods=['POST'])
+def vulnerable_route_3():
+    data = request.form['data']
+    try:
+        deserialized_data = pickle.loads(data.encode())
+        return f'Deserialized object: {deserialized_data}'
+    except Exception as e:
+        return f'Error: {e}'
 
 if __name__ == "__main__":
     app.run(debug=True)
