@@ -1,8 +1,0 @@
-op2=>operation: response = requests.post(url, headers=headers, json={'project': project, 'request': base64.b64encode(request.encode('utf-8')).decode('utf-8'), 'control_flow': base64.b64encode(control_flow.encode('utf-8')).decode('utf-8'), 'response': base64.b64encode(response.encode('utf-8')).decode('utf-8')}, timeout=15)
-cond5=>condition: if (response.status_code == 200)
-sub9=>subroutine: logger.info(f'Данные о запросе {endpoint} отправлены на обработку.')
-sub13=>subroutine: logger.error(f'Сбой отправки данных о запросе {endpoint}. Код ответа: {response.status_code}; Содержимое ответа: {response.text}')
-
-op2->cond5
-cond5(yes)->sub9
-cond5(no)->sub13
