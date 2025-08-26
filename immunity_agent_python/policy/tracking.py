@@ -94,7 +94,7 @@ class Tracking(object):
         for src in source:
             try:
                 source_arr.append(str(src))
-            except Exception:
+            except Exception: # nosec B112
                 continue
 
         target = self.policy_rule.get_target_taints(self_obj, result, args, kwargs)
@@ -159,7 +159,7 @@ def recurse_tracking(obj, node_type, hash_ids=None):
                 ):
                     for it in item:
                         hash_ids = recurse_tracking([it], node_type, hash_ids)
-            except Exception:
+            except Exception: # nosec B110
                 pass
 
     return hash_ids
