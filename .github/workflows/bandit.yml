@@ -1,9 +1,11 @@
+permissions:
+  contents: read
+  
 name: Bandit SAST
 
 on:
   push:
-    branches:
-      - 'master'
+  pull_request:
 
 jobs:
   build:
