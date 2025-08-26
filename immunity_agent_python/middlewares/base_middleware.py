@@ -56,12 +56,12 @@ class BaseMiddleware(object):
     def get_policies(self):
         if self.setting.use_local_policy:
             base_dir = os.path.dirname(os.path.abspath(__file__))
-            file_path = os.path.join(base_dir, '../policy_api.json')
-            with open(file_path, 'r') as f:
+            file_path = os.path.join(base_dir, "../policy_api.json")
+            with open(file_path, "r") as f:
                 policies = json.load(f)
         else:
             policies = self.openapi.get_policies()
 
         if policies.get("status", 0) != 201:
             return []
-        return policies.get('data', [])
+        return policies.get("data", [])

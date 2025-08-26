@@ -17,9 +17,9 @@ class Tracking(object):
 
         self.policy_rule = policy_rule
 
-        self.caller_class = ''
-        self.caller_line_number = ''
-        self.caller_method = ''
+        self.caller_class = ""
+        self.caller_line_number = ""
+        self.caller_method = ""
 
     def get_caller(self, layer):
         tracert = traceback.extract_stack()
@@ -27,22 +27,28 @@ class Tracking(object):
         path = sys.path[0]
 
         not_direct_invoke = [
-            'flask.app.Flask.make_response',
-            'django.urls.resolvers.RoutePattern.match',
+            "flask.app.Flask.make_response",
+            "django.urls.resolvers.RoutePattern.match",
         ]
         while layer > -20:
             tracert_arr = list(tracert[layer])
             if self.policy_rule.signature in not_direct_invoke:
                 break
 
-            if path in tracert_arr[0] and \
-                    (path + os.sep + "immunity_agent_python") not in tracert_arr[0] and \
-                    ("site-packages" + os.sep + "immunity_agent_python") not in tracert_arr[0]:
+            if (
+                path in tracert_arr[0]
+                and (path + os.sep + "immunity_agent_python") not in tracert_arr[0]
+                and ("site-packages" + os.sep + "immunity_agent_python")
+                not in tracert_arr[0]
+            ):
                 break
             layer = layer - 1
 
         # bypass some indirect call stack
-        if self.policy_rule.signature not in not_direct_invoke and path not in tracert_arr[0]:
+        if (
+            self.policy_rule.signature not in not_direct_invoke
+            and path not in tracert_arr[0]
+        ):
             self.ignore_tracking = True
             return
 
@@ -52,7 +58,10 @@ class Tracking(object):
             "lxml.etree.parse",
         ]
         if self.policy_rule.signature in lxml_checks and tracert_arr[3]:
-            if re.search('''XMLParser\\([^)]*resolve_entities\\s*=\\s*False[^)]*\\)''', tracert_arr[3]):
+            if re.search(
+                """XMLParser\\([^)]*resolve_entities\\s*=\\s*False[^)]*\\)""",
+                tracert_arr[3],
+            ):
                 self.ignore_tracking = True
                 return
 
@@ -67,9 +76,10 @@ class Tracking(object):
         if self.policy_rule.node_type != const.NODE_TYPE_SOURCE:
             if self.policy_rule.signature in const.CRYPTO_BAD_CIPHER_NEW:
                 pass
-            elif (self.policy_rule.signature.startswith('Crypto.Cipher._mode_') or
-                  self.policy_rule.signature.startswith('Cryptodome.Cipher._mode_')) and \
-                    self.policy_rule.signature.endswith('Mode.encrypt'):
+            elif (
+                self.policy_rule.signature.startswith("Crypto.Cipher._mode_")
+                or self.policy_rule.signature.startswith("Cryptodome.Cipher._mode_")
+            ) and self.policy_rule.signature.endswith("Mode.encrypt"):
                 for sid in source_ids:
                     if sid not in self.context.taint_ids:
                         return
@@ -114,7 +124,7 @@ class Tracking(object):
             "args": "",
             "callerMethod": self.caller_method,
             "sourceHash": source_ids,
-            "retClassName": ""
+            "retClassName": "",
         }
 
         self.context.pool.append(pool)
@@ -143,8 +153,10 @@ def recurse_tracking(obj, node_type, hash_ids=None):
         elif not isinstance(item, (str, bytes, bytearray)):
             try:
                 item_type = ".".join([type(item).__module__, type(item).__name__])
-                if item_type == 'django.template.context.RequestContext' or \
-                        item_type == 'django.template.context.Context':
+                if (
+                    item_type == "django.template.context.RequestContext"
+                    or item_type == "django.template.context.Context"
+                ):
                     for it in item:
                         hash_ids = recurse_tracking([it], node_type, hash_ids)
             except Exception:

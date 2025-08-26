@@ -5,7 +5,7 @@ from immunity_agent_python.utils import scope
 
 loggers = {}
 
-LOG_FORMAT = "[%(asctime)s] %(levelname)s [%(name)s] %(message)s"  # 每条日志输出格式
+LOG_FORMAT = "[%(asctime)s] %(levelname)s [%(name)s] %(message)s"
 
 
 class AgentLogger(object):

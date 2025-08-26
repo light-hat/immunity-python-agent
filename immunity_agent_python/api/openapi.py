@@ -119,7 +119,7 @@ class OpenAPI(Singleton):
 
     @scope.with_scope(scope.SCOPE_AGENT)
     def thread_heart_report(self):
-        # 上报心跳数据
+        # Reporting heartbeat data
         system_info = {
             "detail": {
                 # 'disk': origin.json_dumps(self.cur_system_info.get_disk()),

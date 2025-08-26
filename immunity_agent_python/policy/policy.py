@@ -2,12 +2,14 @@ from immunity_agent_python.setting import const
 
 
 def new_policy_rule(rule_type, detail):
-    signature = detail.get('value', '')
-    if signature == '' or len(signature.split("."))<2:
+    signature = detail.get("value", "")
+    if signature == "" or len(signature.split(".")) < 2:
         return None
     if rule_type not in const.NODE_TYPES:
         return None
-    return PolicyRule(rule_type, signature, detail.get('source', None), detail.get('target', None))
+    return PolicyRule(
+        rule_type, signature, detail.get("source", None), detail.get("target", None)
+    )
 
 
 class PolicyRule(object):
@@ -17,7 +19,7 @@ class PolicyRule(object):
         splits = signature.split(".")
         self.class_name = splits[-2]
         self.method_name = splits[-1]
-        self.fully_class_name = signature[:-len(self.method_name) - 1]
+        self.fully_class_name = signature[: -len(self.method_name) - 1]
 
         self.origin_method = None
         self.patched_method = None
@@ -59,24 +61,24 @@ class TaintFrom(object):
                 self.from_return = True
             return
 
-        if self.source_or_target == 'P':
+        if self.source_or_target == "P":
             self.from_all_parameters = True
             return
 
-        splits = self.source_or_target.split('|')
+        splits = self.source_or_target.split("|")
         for sp in splits:
-            if sp == 'O':
+            if sp == "O":
                 self.from_object = True
-            elif sp == 'R':
+            elif sp == "R":
                 self.from_return = True
-            elif sp.startswith('P'):
-                if sp == 'P':
+            elif sp.startswith("P"):
+                if sp == "P":
                     self.from_all_parameters = True
                 if self.from_all_parameters:
                     continue
 
                 sp = sp[1:]
-                args = sp.split(',')
+                args = sp.split(",")
                 for arg in args:
                     if arg.isdigit():
                         idx = int(arg) - 1

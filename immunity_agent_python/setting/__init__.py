@@ -1,2 +1,2 @@
-from .setting import Setting
 from .config import Config
+from .setting import Setting

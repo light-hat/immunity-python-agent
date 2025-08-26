@@ -16,7 +16,7 @@ class SystemInfo(object):
             self.psutil = None
             logger.error("psutil import error, please install psutil")
 
-    # 获取网络信息
+    # Get network information
     @scope.with_scope(scope.SCOPE_AGENT)
     def print_net_if_addr(self):
         if self.psutil is not None:
@@ -44,7 +44,7 @@ class SystemInfo(object):
         else:
             return ""
 
-    # 获取cpu信息
+    # Get CPU information
     @scope.with_scope(scope.SCOPE_AGENT)
     def get_cpu_rate(self):
         if self.psutil is not None:
@@ -54,7 +54,7 @@ class SystemInfo(object):
         else:
             return 0
 
-    # 获取系统内存使用情况
+    # Get system memory usage
     @scope.with_scope(scope.SCOPE_AGENT)
     def get_memory_info(self):
         if self.psutil is not None:
@@ -67,7 +67,7 @@ class SystemInfo(object):
         else:
             return {"total": 0, "use": 0, "rate": 0}
 
-    # 获取磁盘信息
+    # Get disk information
     @scope.with_scope(scope.SCOPE_AGENT)
     def get_disk(self):
         disk = {"info": []}
@@ -76,7 +76,7 @@ class SystemInfo(object):
             if devs:
                 for dev in devs:
                     disk_info = self.psutil.disk_usage(dev.mountpoint)
-                    # 将字节转换成G
+                    # Convert bytes to G
                     disk["info"].append(
                         {
                             "name": dev.device,

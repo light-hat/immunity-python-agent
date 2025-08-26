@@ -5,7 +5,9 @@ from immunity_agent_python.utils import scope, utils
 
 
 @scope.with_scope(scope.SCOPE_AGENT)
-def wrap_data(policy_rule, self_obj=None, result=None, come_args=None, come_kwargs=None):
+def wrap_data(
+    policy_rule, self_obj=None, result=None, come_args=None, come_kwargs=None
+):
     setting = Setting()
     if setting.is_agent_paused():
         return
