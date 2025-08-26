@@ -12,11 +12,11 @@ from immunity_agent_python.utils import scope
 logger = logger_config("python_agent")
 
 
-class FireMiddleware(BaseMiddleware):
+class ImmunityDjangoMiddleware(BaseMiddleware):
     def __init__(self, get_response=None):
         self.get_response = get_response
 
-        super(FireMiddleware, self).__init__(
+        super(ImmunityDjangoMiddleware, self).__init__(
             {"name": const.CONTAINER_DJANGO, "version": django.get_version()}
         )
 

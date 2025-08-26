@@ -13,11 +13,11 @@ from immunity_agent_python.utils import scope
 logger = logger_config("python_agent")
 
 
-class AgentMiddleware(BaseMiddleware):
+class ImmunityFlaskMiddleware(BaseMiddleware):
     def __init__(self, old_app, app):
         self.old_wsgi_app = old_app
 
-        super(AgentMiddleware, self).__init__(
+        super(ImmunityFlaskMiddleware, self).__init__(
             {"name": const.CONTAINER_FLASK, "version": flask.__version__}
         )
 
