@@ -1,0 +1,3 @@
+from immunity_agent_python import cli
+
+cli.main()

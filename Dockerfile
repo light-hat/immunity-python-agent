@@ -1,15 +1,20 @@
-FROM python:3.12
+# syntax=docker/dockerfile:1
+FROM python:3.12-slim AS build
 
-WORKDIR /build
+# Опционально: ускорим и сделаем сборку чище
+ENV PIP_NO_CACHE_DIR=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
 
-COPY . /build
+WORKDIR /app
 
-RUN VERSION=$(cat VERSION) \
-    && sed -i "s/0.0.0/$VERSION/" setup.py \
-    && sed -i "s/0.0.0/$VERSION/" pyproject.toml
+COPY . /app
 
-RUN python3 -m pip install --upgrade build
+RUN apt update -y && apt install -y gcc make cmake
 
-RUN python3 -m build --sdist --wheel
+RUN pip install --user --upgrade pip setuptools
 
-RUN pip install dist/*.tar.gz
+RUN pip install --user . -v
+
+RUN pip show dongtai_agent_python
+

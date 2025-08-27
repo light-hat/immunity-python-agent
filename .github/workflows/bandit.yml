@@ -1,9 +1,11 @@
+permissions:
+  contents: read
+  
 name: Bandit SAST
 
 on:
   push:
-    branches:
-      - 'master'
+  pull_request:
 
 jobs:
   build:
@@ -20,4 +22,4 @@ jobs:
           pip install bandit
       - name: Analysing the code with bandit
         run: |
-          cd immunity_agent && bandit -r .
+          cd immunity_agent_python && bandit -r .
