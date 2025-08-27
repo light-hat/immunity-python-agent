@@ -30,7 +30,11 @@ static PyObject *unicode_joinarray_new(PyObject *sep, joinarray_items_t items, P
 }
 
 int apply_fstring_patch(funchook_t *funchook) {
+    #if PY_VERSION_HEX < 0x030D0000
     unicode_joinarray_origin = _PyUnicode_JoinArray;
+    #else
+    unicode_joinarray_origin = _PyUnicode_Join;
+    #endif
     funchook_prepare_wrapper(funchook, &unicode_joinarray_origin, unicode_joinarray_new);
     log_debug("------c_patch------------------ fstring");
 
