@@ -1,12 +1,7 @@
-name: Build macOS
+name: Test build on different OS and Python versions
 
 on:
   push:
-    branches:
-      - master
-  pull_request:
-    branches:
-      - master
 
 jobs:
   setup:
@@ -14,7 +9,39 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ "macos-latest" ]
+        os: [ "windows-latest" ]
+        python-version: [ "3.6", "3.7", "3.8", "3.9", "3.10", "3.11", "3.12", "3.13" ]
+
+    steps:
+      - name: Clone Repository
+        uses: actions/checkout@v2
+
+      - name: Install Visual Studio
+        uses: microsoft/setup-msbuild@v1.1
+        with:
+          msbuild-architecture: x64
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install packages
+        run: |
+          pip install cmake
+
+      - name: Build and Install Agent
+        run: |
+          pip install --user --upgrade pip setuptools
+          pip install --user . -v
+          pip show immunity_agent_python
+
+  unixes:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ "ubuntu-20.04", "ubuntu-22.04", "ubuntu-24.04", "macos-latest" ]
         python-version: [ "3.6", "3.7", "3.8", "3.9", "3.10", "3.11", "3.12", "3.13" ]
 
     steps:
