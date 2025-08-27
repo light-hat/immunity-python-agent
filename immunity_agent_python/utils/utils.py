@@ -64,7 +64,7 @@ def needs_propagation(context, node_type):
 
 def get_hash(item):
     try:
-        h = hashlib.md5( # nosec B324
+        h = hashlib.md5(  # nosec B324
             (c_api.str_origin(id(item)) + ":" + c_api.str_origin(item)).encode("utf-8")
         ).hexdigest()
     except Exception:
@@ -103,7 +103,7 @@ def get_packages():
         package_name = (
             "pypi:" + package.project_name.lower() + ":" + package.version + ":"
         )
-        sha_1 = hashlib.sha1() # nosec B324
+        sha_1 = hashlib.sha1()  # nosec B324
         sha_1.update(bytes(package_name, encoding="utf-8"))
         digest = sha_1.hexdigest()
 

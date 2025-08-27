@@ -1,7 +1,8 @@
 # Based on work by Mario Vilas, http://breakingcode.wordpress.com, licensed under BSD in 2016
 
-import distorm3
 import argparse
+
+import distorm3
 
 
 def parse_args():
@@ -27,9 +28,13 @@ def parse_args():
         dest="dt",
         const=distorm3.Decode64Bits,
     )
-    parser.add_argument("file",)
     parser.add_argument(
-        "offset", type=int, nargs="?",
+        "file",
+    )
+    parser.add_argument(
+        "offset",
+        type=int,
+        nargs="?",
     )
     parser.set_defaults(dt=distorm3.Decode32Bits)
     args = parser.parse_args()
@@ -47,7 +52,7 @@ def main():
     # Print each decoded instruction
     # This shows how to use the DecodeGenerator
     iterable = distorm3.DecodeGenerator(offset, code, args.dt)
-    for (offset, size, instruction, hexdump) in iterable:
+    for offset, size, instruction, hexdump in iterable:
         print("%.8x: %-32s %s" % (offset, hexdump, instruction))
 
     # It could also be used as a returned list:

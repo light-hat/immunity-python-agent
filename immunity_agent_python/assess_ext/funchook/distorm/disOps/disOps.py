@@ -42,176 +42,203 @@
 # To maximize the usage of this DB, one should learn the documentation of diStorm regarding the InstFlag and Operands Types.
 #
 
-import re
-import time
 import functools
 import os
-import x86sets
+import re
+import time
+
 import x86db
 import x86generator
+import x86sets
 
 # Work with multi line and dot-all.
 reFlags = re.M | re.S
 
-def CreateMnemonicsC(mnemonicsIds):
-	""" Create the opcodes arrays for C header files. """
-	opsEnum = "typedef enum {\n\tI_UNDEFINED = 0, "
-	pos = 0
-	l2 = sorted(mnemonicsIds.keys())
-	for i in l2:
-		s = "I_%s = %d" % (i.replace(" ", "_").replace(",", ""), mnemonicsIds[i])
-		if i != l2[-1]:
-			s += ","
-		pos += len(s)
-		if pos >= 70:
-			s += "\n\t"
-			pos = 0
-		elif i != l2[-1]:
-			s += " "
-		opsEnum += s
-	opsEnum += "\n} _InstructionType;"
 
-	# Mnemonics are sorted by insertion order. (Psuedo mnemonics depend on this!)
-	# NOTE: EXTRA BACKSLASHES FORE RE.SUB !!!
-	s = "const unsigned char _MNEMONICS[] =\n\"\\\\x09\" \"UNDEFINED\\\\0\" "
-	l = list(zip(mnemonicsIds.keys(), mnemonicsIds.values()))
-	l = sorted(l, key=functools.cmp_to_key(lambda x, y: x[1] - y[1]))
-	for i in l:
-		s += "\"\\\\x%02x\" \"%s\\\\0\" " % (len(i[0]), i[0])
-		if len(s) - s.rfind("\n") >= 76:
-			s += "\\\\\n"
-	s = s[:-1] # Ignore last space.
-	s += " \\\\\\n\"" + "\\\\x00" * 20 + "\"; /* Sentinel mnemonic. */"
-	# Return enum & mnemonics.
-	return (opsEnum, s)
+def CreateMnemonicsC(mnemonicsIds):
+    """Create the opcodes arrays for C header files."""
+    opsEnum = "typedef enum {\n\tI_UNDEFINED = 0, "
+    pos = 0
+    l2 = sorted(mnemonicsIds.keys())
+    for i in l2:
+        s = "I_%s = %d" % (i.replace(" ", "_").replace(",", ""), mnemonicsIds[i])
+        if i != l2[-1]:
+            s += ","
+        pos += len(s)
+        if pos >= 70:
+            s += "\n\t"
+            pos = 0
+        elif i != l2[-1]:
+            s += " "
+        opsEnum += s
+    opsEnum += "\n} _InstructionType;"
+
+    # Mnemonics are sorted by insertion order. (Psuedo mnemonics depend on this!)
+    # NOTE: EXTRA BACKSLASHES FORE RE.SUB !!!
+    s = 'const unsigned char _MNEMONICS[] =\n"\\\\x09" "UNDEFINED\\\\0" '
+    l = list(zip(mnemonicsIds.keys(), mnemonicsIds.values()))
+    l = sorted(l, key=functools.cmp_to_key(lambda x, y: x[1] - y[1]))
+    for i in l:
+        s += '"\\\\x%02x" "%s\\\\0" ' % (len(i[0]), i[0])
+        if len(s) - s.rfind("\n") >= 76:
+            s += "\\\\\n"
+    s = s[:-1]  # Ignore last space.
+    s += ' \\\\\\n"' + "\\\\x00" * 20 + '"; /* Sentinel mnemonic. */'
+    # Return enum & mnemonics.
+    return (opsEnum, s)
+
 
 def CreateMnemonicsPython(mnemonicsIds):
-	""" Create the opcodes dictionary for Python. """
-	s = "Mnemonics = {\n"
-	for i in mnemonicsIds:
-		s += "0x%x: \"%s\", " % (mnemonicsIds[i], i)
-		if len(s) - s.rfind("\n") >= 76:
-			s = s[:-1] + "\n"
-	# Fix ending of the block.
-	s = s[:-2] # Remote last comma/space we always add for the last line.
-	if s[-1] != "\n":
-		s += "\n"
-	# Return mnemonics dictionary only.
-	return s + "}"
+    """Create the opcodes dictionary for Python."""
+    s = "Mnemonics = {\n"
+    for i in mnemonicsIds:
+        s += '0x%x: "%s", ' % (mnemonicsIds[i], i)
+        if len(s) - s.rfind("\n") >= 76:
+            s = s[:-1] + "\n"
+    # Fix ending of the block.
+    s = s[:-2]  # Remote last comma/space we always add for the last line.
+    if s[-1] != "\n":
+        s += "\n"
+    # Return mnemonics dictionary only.
+    return s + "}"
+
 
 def CreateMnemonicsJava(mnemonicsIds):
-	""" Create the opcodes dictionary/enum for Java. """
-	s = "public enum OpcodeEnum {\n\tUNDEFINED, "
-	for i in mnemonicsIds:
-		s += "%s, " % (i.replace(" ", "_").replace(",", ""))
-		if len(s) - s.rfind("\n") >= 76:
-			s = s[:-1] + "\n\t"
-	# Fix ending of the block.
-	s = s[:-2] # Remote last comma/space we always add for the last line.
-	if s[-1] != "\n":
-		s += "\n"
-	opsEnum = s + "}"
-	s = "static {\n\t\tmOpcodes.put(0, OpcodeEnum.UNDEFINED);\n"
-	for i in mnemonicsIds:
-		s += "\t\tmOpcodes.put(0x%x, OpcodeEnum.%s);\n" % (mnemonicsIds[i], i.replace(" ", "_").replace(",", ""))
-	s += "\t}"
-	# Return enum & mnemonics.
-	return (opsEnum, s)
+    """Create the opcodes dictionary/enum for Java."""
+    s = "public enum OpcodeEnum {\n\tUNDEFINED, "
+    for i in mnemonicsIds:
+        s += "%s, " % (i.replace(" ", "_").replace(",", ""))
+        if len(s) - s.rfind("\n") >= 76:
+            s = s[:-1] + "\n\t"
+    # Fix ending of the block.
+    s = s[:-2]  # Remote last comma/space we always add for the last line.
+    if s[-1] != "\n":
+        s += "\n"
+    opsEnum = s + "}"
+    s = "static {\n\t\tmOpcodes.put(0, OpcodeEnum.UNDEFINED);\n"
+    for i in mnemonicsIds:
+        s += "\t\tmOpcodes.put(0x%x, OpcodeEnum.%s);\n" % (
+            mnemonicsIds[i],
+            i.replace(" ", "_").replace(",", ""),
+        )
+    s += "\t}"
+    # Return enum & mnemonics.
+    return (opsEnum, s)
+
 
 def WriteMnemonicsC(mnemonicsIds):
-	""" Write the enum of opcods and their corresponding mnemonics to the C files. """
-	path = os.path.join("..", "include", "mnemonics.h")
-	print("- Try rewriting mnemonics for %s." % path)
-	e, m = CreateMnemonicsC(mnemonicsIds)
-	old = open(path, "r").read()
-	rePattern = "typedef.{5,20}I_UNDEFINED.*?_InstructionType\;"
-	if re.compile(rePattern, reFlags).search(old) == None:
-		raise Exception("Couldn't find matching mnemonics enum block for substitution in " + path)
-	new = re.sub(rePattern, e, old, 1, reFlags)
-	open(path, "w").write(new)
-	print("Succeeded")
+    """Write the enum of opcods and their corresponding mnemonics to the C files."""
+    path = os.path.join("..", "include", "mnemonics.h")
+    print("- Try rewriting mnemonics for %s." % path)
+    e, m = CreateMnemonicsC(mnemonicsIds)
+    old = open(path, "r").read()
+    rePattern = "typedef.{5,20}I_UNDEFINED.*?_InstructionType\;"
+    if re.compile(rePattern, reFlags).search(old) == None:
+        raise Exception(
+            "Couldn't find matching mnemonics enum block for substitution in " + path
+        )
+    new = re.sub(rePattern, e, old, 1, reFlags)
+    open(path, "w").write(new)
+    print("Succeeded")
 
-	path = os.path.join("..", "src", "mnemonics.c")
-	print("- Try rewriting mnemonics for %s." % path)
-	old = open(path, "r").read()
-	rePattern = "const unsigned char _MNEMONICS\[\] =.*?\*/"
-	if re.compile(rePattern, reFlags).search(old) == None:
-		raise Exception("Couldn't find matching mnemonics text block for substitution in " + path)
-	new = re.sub(rePattern, m, old, 1, reFlags)
-	open(path, "w").write(new)
-	print("Succeeded")
+    path = os.path.join("..", "src", "mnemonics.c")
+    print("- Try rewriting mnemonics for %s." % path)
+    old = open(path, "r").read()
+    rePattern = "const unsigned char _MNEMONICS\[\] =.*?\*/"
+    if re.compile(rePattern, reFlags).search(old) == None:
+        raise Exception(
+            "Couldn't find matching mnemonics text block for substitution in " + path
+        )
+    new = re.sub(rePattern, m, old, 1, reFlags)
+    open(path, "w").write(new)
+    print("Succeeded")
+
 
 def WriteMnemonicsPython(mnemonicsIds):
-	""" Write the dictionary of opcods to the python module. """
-	#
-	# Fix Python dictionary inside distorm3/_generated.py.
-	#
-	path = os.path.join("..", "python", "distorm3", "_generated.py")
-	print("- Try rewriting mnemonics for %s." % path)
-	d = CreateMnemonicsPython(mnemonicsIds)
-	old = open(path, "r").read()
-	rePattern = "Mnemonics = \{.*?\}"
-	if re.compile(rePattern, reFlags).search(old) == None:
-		raise Exception("Couldn't find matching mnemonics dictionary for substitution in " + path)
-	new = re.sub(rePattern, d, old, 1, reFlags)
-	open(path, "w").write(new)
-	print("Succeeded")
+    """Write the dictionary of opcods to the python module."""
+    #
+    # Fix Python dictionary inside distorm3/_generated.py.
+    #
+    path = os.path.join("..", "python", "distorm3", "_generated.py")
+    print("- Try rewriting mnemonics for %s." % path)
+    d = CreateMnemonicsPython(mnemonicsIds)
+    old = open(path, "r").read()
+    rePattern = "Mnemonics = \{.*?\}"
+    if re.compile(rePattern, reFlags).search(old) == None:
+        raise Exception(
+            "Couldn't find matching mnemonics dictionary for substitution in " + path
+        )
+    new = re.sub(rePattern, d, old, 1, reFlags)
+    open(path, "w").write(new)
+    print("Succeeded")
+
 
 def WriteMnemonicsJava(mnemonicsIds):
-	""" Write the enum of opcods and their corresponding mnemonics to the Java files. """
-	#
-	# Fix Java enum and mnemonics arrays
-	#
-	path = os.path.join("..", "examples", "java", "distorm", "src", "diStorm3", "OpcodeEnum.java")
-	print("- Try rewriting mnemonics for %s." % path)
-	e, m = CreateMnemonicsJava(mnemonicsIds)
-	old = open(path, "r").read()
-	rePattern = "public enum OpcodeEnum \{.*?}"
-	if re.compile(rePattern, reFlags).search(old) == None:
-		raise Exception("Couldn't find matching mnemonics enum block for substitution in " + path)
-	new = re.sub(rePattern, e, old, 1, reFlags)
-	open(path, "w").write(new)
-	print("Succeeded")
+    """Write the enum of opcods and their corresponding mnemonics to the Java files."""
+    #
+    # Fix Java enum and mnemonics arrays
+    #
+    path = os.path.join(
+        "..", "examples", "java", "distorm", "src", "diStorm3", "OpcodeEnum.java"
+    )
+    print("- Try rewriting mnemonics for %s." % path)
+    e, m = CreateMnemonicsJava(mnemonicsIds)
+    old = open(path, "r").read()
+    rePattern = "public enum OpcodeEnum \{.*?}"
+    if re.compile(rePattern, reFlags).search(old) == None:
+        raise Exception(
+            "Couldn't find matching mnemonics enum block for substitution in " + path
+        )
+    new = re.sub(rePattern, e, old, 1, reFlags)
+    open(path, "w").write(new)
+    print("Succeeded")
 
-	path = os.path.join("..", "examples", "java", "distorm", "src", "diStorm3", "Opcodes.java")
-	print("- Try rewriting mnemonics for %s." % path)
-	old = open(path, "r").read()
-	rePattern = "static \{.*?}"
-	if re.compile(rePattern, reFlags).search(old) == None:
-		raise Exception("Couldn't find matching mnemonics text block for substitution in " + path)
-	new = re.sub(rePattern, m, old, 1, reFlags)
-	open(path, "w").write(new)
-	print("Succeeded")
+    path = os.path.join(
+        "..", "examples", "java", "distorm", "src", "diStorm3", "Opcodes.java"
+    )
+    print("- Try rewriting mnemonics for %s." % path)
+    old = open(path, "r").read()
+    rePattern = "static \{.*?}"
+    if re.compile(rePattern, reFlags).search(old) == None:
+        raise Exception(
+            "Couldn't find matching mnemonics text block for substitution in " + path
+        )
+    new = re.sub(rePattern, m, old, 1, reFlags)
+    open(path, "w").write(new)
+    print("Succeeded")
+
 
 def WriteInstsC(lists):
-	""" Write the tables of the instructions in the C source code. """
-	path = os.path.join("..", "src", "insts.c")
-	print("- Try rewriting instructions for %s." % path)
-	old = open(path, "r").read()
-	pos = old.find("/*\n * GENERATED")
-	if pos == -1:
-		raise Exception("Can't find marker in %s" % path)
-	new = old[:pos]
-	new += "/*\n * GENERATED BY disOps at %s\n */\n\n" % time.asctime()
-	new += lists
-	open(path, "w").write(new)
-	print("Succeeded")
+    """Write the tables of the instructions in the C source code."""
+    path = os.path.join("..", "src", "insts.c")
+    print("- Try rewriting instructions for %s." % path)
+    old = open(path, "r").read()
+    pos = old.find("/*\n * GENERATED")
+    if pos == -1:
+        raise Exception("Can't find marker in %s" % path)
+    new = old[:pos]
+    new += "/*\n * GENERATED BY disOps at %s\n */\n\n" % time.asctime()
+    new += lists
+    open(path, "w").write(new)
+    print("Succeeded")
+
 
 def main():
-	# Init the 80x86/x64 instructions sets DB.
-	db = x86db.InstructionsDB()
-	x86InstructionsSet = x86sets.Instructions(db.SetInstruction)
-	# Generate all tables of id's and pointers with the instructions themselves.
-	mnemonicsIds, lists = x86generator.CreateTables(db)
-	# Rewrite C instructions tables.
-	WriteInstsC(lists)
-	# Rewrite mnemonics of the C source code.
-	WriteMnemonicsC(mnemonicsIds)
-	# Rewrite mnemonics for the Python module.
-	WriteMnemonicsPython(mnemonicsIds)
-	# Rewrite mnemonics for the Java binding example code.
-	WriteMnemonicsJava(mnemonicsIds)
-	# C#:
-	# Note that it will update its mnemonics upon compilation by taking them directly from the C code.
+    # Init the 80x86/x64 instructions sets DB.
+    db = x86db.InstructionsDB()
+    x86InstructionsSet = x86sets.Instructions(db.SetInstruction)
+    # Generate all tables of id's and pointers with the instructions themselves.
+    mnemonicsIds, lists = x86generator.CreateTables(db)
+    # Rewrite C instructions tables.
+    WriteInstsC(lists)
+    # Rewrite mnemonics of the C source code.
+    WriteMnemonicsC(mnemonicsIds)
+    # Rewrite mnemonics for the Python module.
+    WriteMnemonicsPython(mnemonicsIds)
+    # Rewrite mnemonics for the Java binding example code.
+    WriteMnemonicsJava(mnemonicsIds)
+    # C#:
+    # Note that it will update its mnemonics upon compilation by taking them directly from the C code.
+
 
 main()

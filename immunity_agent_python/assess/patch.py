@@ -1,15 +1,14 @@
 import copy
 import sys
 
-from dongtai_agent_python.assess import common_hook, c_api_hook
-from dongtai_agent_python.assess import ctypes_hook
+from dongtai_agent_python.assess import c_api_hook, common_hook, ctypes_hook
 from dongtai_agent_python.assess_ext import c_api
 from dongtai_agent_python.common.logger import logger_config
 from dongtai_agent_python.policy import policy
 from dongtai_agent_python.setting import const
 from dongtai_agent_python.utils import scope
 
-logger = logger_config('assess_patch')
+logger = logger_config("assess_patch")
 
 
 class Namespace(object):
@@ -29,31 +28,37 @@ def enable_patches(policies):
     has_patched = {}
 
     for rules in policies:
-        if rules['enable'] != 1 or not rules['details']:
+        if rules["enable"] != 1 or not rules["details"]:
             continue
 
-        for item in rules['details']:
-            signature = item['value']
+        for item in rules["details"]:
+            signature = item["value"]
 
             if signature in has_patched:
                 continue
 
-            policy_rule = policy.new_policy_rule(rules['type'], item)
+            policy_rule = policy.new_policy_rule(rules["type"], item)
             if policy_rule is None:
                 continue
 
             policy_arr = signature.split(".")
 
-            if signature == 'builtins.eval' or signature == 'builtins.exec':
+            if signature == "builtins.eval" or signature == "builtins.exec":
                 method_name = policy_arr[-1]
-                new_module = LazyImportHook('builtins', [method_name])
+                new_module = LazyImportHook("builtins", [method_name])
                 origin_method = getattr(new_module, method_name)
                 origin_cls = new_module.origin_module()
 
                 new_fn = common_hook.build_exec_eval_patch(origin_method, policy_rule)
                 origin_cls_ptr = ctypes_hook.magic_get_dict(origin_cls)
                 origin_cls_ptr[method_name] = new_fn
-                logger.debug("------exec_eval_patch---------- " + "[" + str(rules['type']) + "]" + signature)
+                logger.debug(
+                    "------exec_eval_patch---------- "
+                    + "["
+                    + str(rules["type"])
+                    + "]"
+                    + signature
+                )
                 has_patched[signature] = True
                 continue
             elif signature in const.C_API_PATCHES:
@@ -101,11 +106,25 @@ def enable_patches(policies):
                 hooked = ctypes_hook.build_method_patch(origin_cls, policy_rule)
                 if hooked is None:
                     continue
-                logger.debug("------origin_cls_property------ " + "[" + str(rules['type']) + "]" + signature)
+                logger.debug(
+                    "------origin_cls_property------ "
+                    + "["
+                    + str(rules["type"])
+                    + "]"
+                    + signature
+                )
                 after_cls[method_name] = hooked
             else:
-                logger.debug("------origin_cls_function------ " + "[" + str(rules['type']) + "]" + signature)
-                after_cls[method_name] = common_hook.BuildFuncPatch(origin_method, policy_rule)
+                logger.debug(
+                    "------origin_cls_function------ "
+                    + "["
+                    + str(rules["type"])
+                    + "]"
+                    + signature
+                )
+                after_cls[method_name] = common_hook.BuildFuncPatch(
+                    origin_method, policy_rule
+                )
 
             has_patched[signature] = True
 
@@ -128,7 +147,9 @@ class LazyImportHook:
 
     def __getattr__(self, name):
         if self.module is None:
-            self.module = __import__(self.module_name, globals(), locals(), self.fromlist, 0)
+            self.module = __import__(
+                self.module_name, globals(), locals(), self.fromlist, 0
+            )
 
         return getattr(self.module, name)
 

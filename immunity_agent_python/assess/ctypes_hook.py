@@ -29,7 +29,9 @@ def magic_flush_mro_cache():
 
 # Property method hook
 def build_method_patch(origin_cls, policy_rule, *args, **kwargs):
-    copy_new_class = type(origin_cls.__name__, origin_cls.__bases__, dict(origin_cls.__dict__))
+    copy_new_class = type(
+        origin_cls.__name__, origin_cls.__bases__, dict(origin_cls.__dict__)
+    )
     if policy_rule.method_name not in copy_new_class.__dict__:
         return None
     origin_method = getattr(origin_cls, policy_rule.method_name)
@@ -38,7 +40,9 @@ def build_method_patch(origin_cls, policy_rule, *args, **kwargs):
     def child_func(*args, **kwargs):
         if policy_rule.node_type == const.NODE_TYPE_FILTER:
             with scope.scope(scope.SCOPE_AGENT):
-                result = copy_new_class.__dict__[policy_rule.method_name](*args, **kwargs)
+                result = copy_new_class.__dict__[policy_rule.method_name](
+                    *args, **kwargs
+                )
         else:
             result = copy_new_class.__dict__[policy_rule.method_name](*args, **kwargs)
         if scope.in_scope(scope.SCOPE_AGENT):

@@ -42,7 +42,7 @@ class DjangoRequest(Request):
                 request._stream.stream = BytesIO(req_body)
                 if req_body and isinstance(req_body, bytes):
                     request_body = bytes.decode(req_body, "utf-8", errors="ignore")
-            except Exception: # nosec B110
+            except Exception:  # nosec B110
                 pass
 
         return request_body

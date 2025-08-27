@@ -3,7 +3,7 @@ import os
 import random
 import string
 import sys
-from subprocess import PIPE, Popen # nosec B404
+from subprocess import PIPE, Popen  # nosec B404
 
 import requests
 
@@ -36,7 +36,7 @@ def run(args):
                 cmd_path = path
                 break
 
-    os.execl(cmd_path, *args) # nosec B606
+    os.execl(cmd_path, *args)  # nosec B606
 
 
 def get_config():
@@ -85,7 +85,8 @@ def update(config_data):
 
     file_path = os.path.dirname(__file__)
     rnd = "".join(
-        random.choice(string.ascii_lowercase + string.digits) for _ in range(8) # nosec B311
+        random.choice(string.ascii_lowercase + string.digits)
+        for _ in range(8)  # nosec B311
     )
     filename = file_path + os.sep + "immunity-agent-python-" + rnd + ".tar.gz"
     resp = requests.get(
@@ -124,7 +125,7 @@ def update(config_data):
 
 
 def run_command(args):
-    p = Popen(args, stdout=PIPE, stderr=PIPE) # nosec B603
+    p = Popen(args, stdout=PIPE, stderr=PIPE)  # nosec B603
     output = p.communicate()
     return {"code": p.returncode, "output": output[0], "error": output[1]}
 
