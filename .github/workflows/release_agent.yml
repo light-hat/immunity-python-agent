@@ -86,10 +86,6 @@ jobs:
       - name: Build wheel and sdist
         run: |
           python -m build --wheel --sdist
-
-      - name: List artifacts
-        run: |
-          ls -la dist/
           
       - name: Upload artifacts (wheels and sdist)
         uses: actions/upload-artifact@v4
