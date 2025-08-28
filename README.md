@@ -1,5 +1,5 @@
 <p align="center">
-<img alt="Logo" src="frontend/public/favicon_gray.png" height="100px">
+<img alt="Logo" src="assets/favicon_gray.png" height="100px">
 </p>
 
 <h1 align="center">Immunity</h1>
@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-Interactive Analysis Platform for Distributed Debugging and Security Testing (IAST, SCA). 
+IAST agent for passive interactive security testing of web applications in Python.
 </p>
 
 # Stats
