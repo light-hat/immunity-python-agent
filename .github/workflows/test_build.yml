@@ -1,4 +1,4 @@
-name: Test build on different OS and Python versions
+name: Test Build
 
 on:
   pull_request:
