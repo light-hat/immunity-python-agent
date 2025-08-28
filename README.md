@@ -7,7 +7,7 @@
 <p align="center">
 <a href="https://www.gnu.org/licenses/gpl-3.0"><img alt="License" src="https://img.shields.io/badge/License-GPLv3-blue.svg"></a>
 <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
-<img alt="Python version" src="https://img.shields.io/badge/Python-3.7|3.8|3.9|3.10|3.11|3.12-3776AB.svg?style=flat&logo=python&logoColor=white">
+<img alt="Python version" src="https://img.shields.io/badge/Python-3.7%20|%203.8|3.9|3.10|3.11|3.12-3776AB.svg?style=flat&logo=python&logoColor=white">
 <a href="https://app.fossa.com/projects/git%2Bgithub.com%2Flight-hat%2Fimmunity-python-agent?ref=badge_shield"><img alt="Fossa" src="https://app.fossa.com/api/projects/git%2Bgithub.com%2Flight-hat%2Fimmunity-python-agent.svg?type=shield"></a>
 </p>
 
