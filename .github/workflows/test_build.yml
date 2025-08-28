@@ -1,6 +1,3 @@
-permissions:
-  contents: read
-
 name: Test build on different OS and Python versions
 
 on:
@@ -10,6 +7,8 @@ jobs:
 
   ubuntu:
     runs-on: ${{ matrix.os }}
+    permissions:
+      contents: read
     strategy:
       fail-fast: false
       matrix:
@@ -38,6 +37,8 @@ jobs:
 
   windows:
     runs-on: ${{ matrix.os }}
+    permissions:
+      contents: read
     needs: [ubuntu]
     strategy:
       fail-fast: false
@@ -71,6 +72,8 @@ jobs:
 
   macos:
     runs-on: ${{ matrix.os }}
+    permissions:
+      contents: read
     needs: [windows]
     strategy:
       fail-fast: false
