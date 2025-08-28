@@ -1,7 +1,7 @@
 name: Test build on different OS and Python versions
 
 on:
-  push:
+  pull_request:
 
 jobs:
 
