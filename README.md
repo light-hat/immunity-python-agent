@@ -10,8 +10,6 @@
 <a href="https://github.com/light-hat/smart_ids/actions"><img alt="Pipeline status" src="https://github.com/light-hat/immunity/workflows/Pylint/badge.svg"></a>
 <a href="https://github.com/light-hat/smart_ids/actions"><img alt="Pipeline status" src="https://github.com/light-hat/immunity/workflows/CodeQL/badge.svg"></a>
 <a href="https://github.com/light-hat/smart_ids/actions"><img alt="Pipeline status" src="https://github.com/light-hat/immunity/workflows/Bandit%20SAST/badge.svg"></a>
-<a href="https://github.com/light-hat/smart_ids/actions"><img alt="Pipeline status" src="https://github.com/light-hat/immunity/workflows/Test%20Build/badge.svg"></a>
-<a href="https://github.com/light-hat/smart_ids/actions"><img alt="Pipeline status" src="https://github.com/light-hat/immunity/workflows/Release/badge.svg"></a>
 <img alt="Python version" src="https://img.shields.io/badge/Python-3.7%20|%203.8%20|%203.9%20|%203.10%20|%203.11%20|%203.12-3776AB.svg?style=flat&logo=python&logoColor=white">
 <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
 <a href="https://app.fossa.com/projects/git%2Bgithub.com%2Flight-hat%2Fimmunity-python-agent?ref=badge_shield"><img alt="Fossa" src="https://app.fossa.com/api/projects/git%2Bgithub.com%2Flight-hat%2Fimmunity-python-agent.svg?type=shield"></a>

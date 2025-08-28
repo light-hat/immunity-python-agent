@@ -86,10 +86,6 @@ jobs:
       - name: Build wheel and sdist
         run: |
           python -m build --wheel --sdist
-
-      - name: List artifacts
-        run: |
-          ls -la dist/
           
       - name: Upload artifacts (wheels and sdist)
         uses: actions/upload-artifact@v4
@@ -97,3 +93,30 @@ jobs:
           name: dist-${{ matrix.os }}-py${{ matrix.python-version }}
           path: dist/
           retention-days: 1
+
+  publish:
+    name: Publish package to PyPI
+    runs-on: ubuntu-latest
+    needs: [ubuntu, windows]
+    environment: pypi
+    permissions:
+      id-token: write
+
+    steps:
+      - name: Download all wheel artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist/
+          pattern: immunity-wheels-*
+          merge-multiple: true
+
+      - name: List files for debugging
+        run: ls -la dist/
+
+      - name: Upload to PyPI
+        env:
+          TWINE_USERNAME: ${{ secrets.USR }}
+          TWINE_PASSWORD: ${{ secrets.PWD }}
+        run: |
+          pip install --user --upgrade twine
+          python3 -m twine upload dist/*
