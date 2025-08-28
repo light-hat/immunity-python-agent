@@ -1,3 +1,6 @@
+permissions:
+  contents: read
+
 name: Test build on different OS and Python versions
 
 on:
