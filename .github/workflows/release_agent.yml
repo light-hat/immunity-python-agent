@@ -1,7 +1,7 @@
-name: Test build on different OS and Python versions
+name: Build wheels and publish to pypi
 
 on:
-  pull_request:
+  workflow_dispatch:
 
 jobs:
 
@@ -29,11 +29,18 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Build and Install Agent
+      - name: Install build dependencies
         run: |
-          pip install --user --upgrade pip setuptools
-          pip install --user . -v
-          pip show immunity_agent_python
+          python -m pip install --upgrade pip
+          pip install build
+
+      - name: Build wheel and sdist
+        run: |
+          python -m build --wheel --sdist
+
+      - name: List artifacts
+        run: |
+          ls -la dist/
 
   windows:
     runs-on: ${{ matrix.os }}
@@ -44,7 +51,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ "windows-latest" ]
-        python-version: [ "3.6", "3.7", "3.8", "3.9", "3.10", "3.11", "3.12" ]
+        python-version: [ "3.6" ] #, "3.7", "3.8", "3.9", "3.10", "3.11", "3.12" ]
 
     steps:
       - name: Clone Repository
@@ -64,38 +71,15 @@ jobs:
         run: |
           pip install cmake
 
-      - name: Build and Install Agent
+      - name: Install build dependencies
         run: |
-          pip install --user --upgrade pip setuptools
-          pip install --user . -v
-          pip show immunity_agent_python
+          python -m pip install --upgrade pip
+          pip install build
 
-  macos:
-    runs-on: ${{ matrix.os }}
-    permissions:
-      contents: read
-    needs: [windows]
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ "macos-latest" ]
-        python-version: [ "3.7", "3.8", "3.9", "3.10", "3.11", "3.12" ]
-
-    steps:
-      - name: Clone Repository
-        uses: actions/checkout@v4
-
-      - name: Install packages
+      - name: Build wheel and sdist
         run: |
-          brew install cmake
+          python -m build --wheel --sdist
 
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python-version }}
-
-      - name: Build and Install Agent
+      - name: List artifacts
         run: |
-          pip install --user --upgrade pip setuptools
-          pip install --user . -v
-          pip show immunity_agent_python
+          ls -la dist/
