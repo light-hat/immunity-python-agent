@@ -2,7 +2,7 @@
 <img alt="Logo" src="assets/favicon_gray.png" height="100px">
 </p>
 
-<h1 align="center">Immunity</h1>
+<h1 align="center">Immunity Python Agent</h1>
 
 <p align="center">
 <a href="https://app.fossa.com/projects/git%2Bgithub.com%2Flight-hat%2Fimmunity-python-agent?ref=badge_shield"><img alt="Fossa" src="https://app.fossa.com/api/projects/git%2Bgithub.com%2Flight-hat%2Fimmunity-python-agent.svg?type=shield"></a>
