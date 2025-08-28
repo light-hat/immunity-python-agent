@@ -116,5 +116,5 @@ jobs:
           TWINE_USERNAME: ${{ secrets.USR }}
           TWINE_PASSWORD: ${{ secrets.PWD }}
         run: |
-          pip install --user --upgrade twine
+          pip install --upgrade setuptools wheel twine build
           python3 -m twine upload dist/*
