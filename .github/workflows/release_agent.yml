@@ -39,11 +39,20 @@ jobs:
           docker run --rm -v $PWD:/io \
             -e PYTHON_VERSION=${{ matrix.python-version }} \
             quay.io/pypa/manylinux2014_x86_64 /bin/bash -c "
-            # Install system dependencies
-            yum install -y cmake make  # Добавьте ваши зависимости здесь
+            # Устанавливаем системные зависимости
+            yum install -y cmake make
             
-            # Build wheel
-            PYTHON_TAG=\$(python3 /io/scripts/get_python_tag $PYTHON_VERSION)
+            # Прямое определение тега на основе версии Python
+            MAJOR_MINOR=\$(echo \$PYTHON_VERSION | cut -d. -f1,2 | tr -d .)
+            if [ \$(echo \"\$PYTHON_VERSION\" | cut -d. -f2) -lt 8 ]; then
+              SUFFIX=\"m\"
+            else
+              SUFFIX=\"\"
+            fi
+            PYTHON_TAG=\"cp\${MAJOR_MINOR}-cp\${MAJOR_MINOR}\${SUFFIX}\"
+            echo \"Using Python tag: \$PYTHON_TAG\"
+            
+            # Собираем wheel
             /opt/python/\$PYTHON_TAG/bin/pip install build
             /opt/python/\$PYTHON_TAG/bin/python -m build --wheel --outdir /io/dist/
           "
