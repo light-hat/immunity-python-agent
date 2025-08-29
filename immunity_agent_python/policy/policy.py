@@ -1,4 +1,4 @@
-from immunity_agent_python.setting import const
+from immunity_python_agent.setting import const
 
 
 def new_policy_rule(rule_type, detail):

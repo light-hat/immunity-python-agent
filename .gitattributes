@@ -1,0 +1,14 @@
+*.java linguist-vendored
+*.cs linguist-vendored
+*.cpp linguist-vendored
+*.s linguist-vendored
+*.S linguist-vendored
+*.asm linguist-vendored
+*.cmake linguist-vendored
+*.in linguist-vendored
+*.cmake.in linguist-vendored
+CMakeLists.txt linguist-vendored
+*.txt linguist-vendored
+*.makefile linguist-vendored
+*.Makefile linguist-vendored
+*.Dockerfile linguist-vendored

@@ -13,7 +13,7 @@ from setuptools.command.install_lib import install_lib
 
 ext_clean = os.environ.get("ASSESS_EXT_CLEAN")
 
-assess_ext_path = os.path.join("immunity_agent_python", "assess_ext")
+assess_ext_path = os.path.join("immunity_python_agent", "assess_ext")
 c_sources = glob(os.path.join(assess_ext_path, "*.c")) + glob(
     os.path.join(assess_ext_path, "patch/*.c")
 )
@@ -127,7 +127,7 @@ class InstallLib(install_lib):
 
 extensions = [
     Extension(
-        "immunity_agent_python.assess_ext.c_api",
+        "immunity_python_agent.assess_ext.c_api",
         c_sources,
         libraries=libraries,
         include_dirs=include_dirs,
@@ -140,12 +140,12 @@ extensions = [
 
 
 setup(
-    name="immunity_agent_python",
+    name="immunity_python_agent",
     scripts=["scripts" + os.sep + "immunity-ctl"],
     include_package_data=True,
     cmdclass=dict(build_ext=BuildExt, install_lib=InstallLib),
     ext_modules=extensions,
     entry_points={
-        "console_scripts": ["immunity-ctl = immunity_agent_python.cli:main"],
+        "console_scripts": ["immunity-ctl = immunity_python_agent.cli:main"],
     },
 )

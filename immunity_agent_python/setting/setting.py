@@ -1,7 +1,7 @@
 import os
 
-from immunity_agent_python import version
-from immunity_agent_python.utils import Singleton
+from immunity_python_agent import version
+from immunity_python_agent.utils import Singleton
 
 from .config import Config
 

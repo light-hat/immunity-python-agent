@@ -1,7 +1,7 @@
-from immunity_agent_python import CONTEXT_TRACKER
-from immunity_agent_python.policy.tracking import Tracking
-from immunity_agent_python.setting import Setting, const
-from immunity_agent_python.utils import scope, utils
+from immunity_python_agent import CONTEXT_TRACKER
+from immunity_python_agent.policy.tracking import Tracking
+from immunity_python_agent.setting import Setting, const
+from immunity_python_agent.utils import scope, utils
 
 
 @scope.with_scope(scope.SCOPE_AGENT)
