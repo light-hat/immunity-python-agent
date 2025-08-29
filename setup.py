@@ -141,7 +141,6 @@ extensions = [
 
 setup(
     name="immunity_agent_python",
-    license='GPL-3.0-only',
     scripts=["scripts" + os.sep + "immunity-ctl"],
     include_package_data=True,
     cmdclass=dict(build_ext=BuildExt, install_lib=InstallLib),
