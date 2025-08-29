@@ -35,7 +35,7 @@ jobs:
           name: wheels
           path: wheelhouse/*.whl
   
-  publish_pypi:
+  pypi:
     needs: wheels
     runs-on: ubuntu-latest
     environment: pypi
