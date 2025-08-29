@@ -33,7 +33,7 @@ jobs:
         run: |
           pip install --user --upgrade pip setuptools
           pip install --user . -v
-          pip show immunity_agent_python
+          pip show immunity_python_agent
 
   windows:
     runs-on: ${{ matrix.os }}
@@ -68,7 +68,7 @@ jobs:
         run: |
           pip install --user --upgrade pip setuptools
           pip install --user . -v
-          pip show immunity_agent_python
+          pip show immunity_python_agent
 
   macos:
     runs-on: ${{ matrix.os }}
@@ -98,4 +98,4 @@ jobs:
         run: |
           pip install --user --upgrade pip setuptools
           pip install --user . -v
-          pip show immunity_agent_python
+          pip show immunity_python_agent

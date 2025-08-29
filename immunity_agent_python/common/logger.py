@@ -1,7 +1,7 @@
 import logging
 
-from immunity_agent_python.setting import Setting
-from immunity_agent_python.utils import scope
+from immunity_python_agent.setting import Setting
+from immunity_python_agent.utils import scope
 
 loggers = {}
 

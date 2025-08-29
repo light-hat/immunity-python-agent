@@ -4,9 +4,9 @@ import os
 
 import pkg_resources
 
-from immunity_agent_python.assess_ext import c_api
-from immunity_agent_python.setting import const
-from immunity_agent_python.utils import scope
+from immunity_python_agent.assess_ext import c_api
+from immunity_python_agent.setting import const
+from immunity_python_agent.utils import scope
 
 
 @scope.with_scope(scope.SCOPE_AGENT)

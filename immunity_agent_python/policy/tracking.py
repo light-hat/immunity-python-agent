@@ -5,9 +5,9 @@ import traceback
 
 from pkg_resources import parse_version
 
-from immunity_agent_python import CONTEXT_TRACKER
-from immunity_agent_python.setting import const
-from immunity_agent_python.utils import scope, utils
+from immunity_python_agent import CONTEXT_TRACKER
+from immunity_python_agent.setting import const
+from immunity_python_agent.utils import scope, utils
 
 
 class Tracking(object):
@@ -37,8 +37,8 @@ class Tracking(object):
 
             if (
                 path in tracert_arr[0]
-                and (path + os.sep + "immunity_agent_python") not in tracert_arr[0]
-                and ("site-packages" + os.sep + "immunity_agent_python")
+                and (path + os.sep + "immunity_python_agent") not in tracert_arr[0]
+                and ("site-packages" + os.sep + "immunity_python_agent")
                 not in tracert_arr[0]
             ):
                 break

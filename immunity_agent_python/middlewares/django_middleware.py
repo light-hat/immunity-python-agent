@@ -2,12 +2,12 @@ import base64
 
 import django
 
-from immunity_agent_python import CONTEXT_TRACKER
-from immunity_agent_python.common.logger import logger_config
-from immunity_agent_python.context import DjangoRequest, RequestContext
-from immunity_agent_python.middlewares.base_middleware import BaseMiddleware
-from immunity_agent_python.setting import const
-from immunity_agent_python.utils import scope
+from immunity_python_agent import CONTEXT_TRACKER
+from immunity_python_agent.common.logger import logger_config
+from immunity_python_agent.context import DjangoRequest, RequestContext
+from immunity_python_agent.middlewares.base_middleware import BaseMiddleware
+from immunity_python_agent.setting import const
+from immunity_python_agent.utils import scope
 
 logger = logger_config("python_agent")
 

@@ -3,11 +3,11 @@ import os
 import time
 from concurrent.futures import ThreadPoolExecutor
 
-from immunity_agent_python.api import OpenAPI
-from immunity_agent_python.assess.patch import enable_patches
-from immunity_agent_python.common.logger import logger_config
-from immunity_agent_python.setting import Setting
-from immunity_agent_python.utils import scope
+from immunity_python_agent.api import OpenAPI
+from immunity_python_agent.assess.patch import enable_patches
+from immunity_python_agent.common.logger import logger_config
+from immunity_python_agent.setting import Setting
+from immunity_python_agent.utils import scope
 
 logger = logger_config("base_middleware")
 

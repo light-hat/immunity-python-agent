@@ -7,7 +7,7 @@ from subprocess import PIPE, Popen  # nosec B404
 
 import requests
 
-from immunity_agent_python.cli import command, log_message, usage
+from immunity_python_agent.cli import command, log_message, usage
 
 
 @command("run", "...", """Executes the command with agent upgrade at startup""")

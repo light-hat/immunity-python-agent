@@ -1,3 +1,3 @@
-from immunity_agent_python.context import ContextTracker
+from immunity_python_agent.context import ContextTracker
 
 CONTEXT_TRACKER = ContextTracker()

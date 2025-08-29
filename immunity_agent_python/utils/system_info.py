@@ -1,5 +1,5 @@
-from immunity_agent_python.common.logger import logger_config
-from immunity_agent_python.utils import scope
+from immunity_python_agent.common.logger import logger_config
+from immunity_python_agent.utils import scope
 
 logger = logger_config("system_info")
 
