@@ -1,0 +1,10 @@
+#!/usr/bin/env python3
+
+import sys
+
+version = sys.argv[1]
+major, minor = version.split('.')[:2]
+tag = f"cp{major}{minor}-cp{major}{minor}"
+if (int(major), int(minor)) < (3, 8):
+    tag += "m"
+print(tag)

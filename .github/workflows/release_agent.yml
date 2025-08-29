@@ -29,40 +29,24 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install build dependencies
+      # - name: Install build dependencies
+      #   run: |
+      #     python -m pip install --upgrade pip
+      #     pip install build
+
+      - name: Build for Linux (manylinux2014)
         run: |
-          python -m pip install --upgrade pip
-          pip install build auditwheel
-
-      - name: Build wheel and sdist
-        run: |
-          python -m build --wheel --sdist
-
-      - name: Repair wheels with auditwheel
-        run: |
-          # Определяем архитектуру и соответствующий тег manylinux
-          ARCH=$(uname -m)
-          if [ "$ARCH" = "x86_64" ]; then
-            PLAT="manylinux2014_x86_64"
-          elif [ "$ARCH" = "aarch64" ]; then
-            PLAT="manylinux2014_aarch64"
-          else
-            echo "Unsupported architecture: $ARCH"
-            exit 1
-          fi
-
-          # Создаем временную директорию для исправленных колес
-          mkdir -p repaired_wheels
-          
-          # Исправляем каждое колесо
-          for wheel in dist/*.whl; do
-            auditwheel repair "$wheel" --plat $PLAT -w repaired_wheels/
-          done
-
-          # Заменяем оригинальные колеса исправленными
-          rm -f dist/*.whl
-          mv repaired_wheels/*.whl dist/
-          rmdir repaired_wheels
+          docker run --rm -v $PWD:/io \
+            -e PYTHON_VERSION=${{ matrix.python-version }} \
+            quay.io/pypa/manylinux2014_x86_64 /bin/bash -c "
+            # Install system dependencies
+            yum install -y cmake make  # Добавьте ваши зависимости здесь
+            
+            # Build wheel
+            PYTHON_TAG=\$(/io/scripts/get_python_tag $PYTHON_VERSION)
+            /opt/python/\$PYTHON_TAG/bin/pip install build
+            /opt/python/\$PYTHON_TAG/bin/python -m build --wheel --outdir /io/dist/
+          "
 
       - name: List artifacts
         run: |
