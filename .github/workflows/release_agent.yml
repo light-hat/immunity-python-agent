@@ -36,7 +36,7 @@ jobs:
           path: wheelhouse/*.whl
   
   publish_pypi:
-    needs: build_wheels
+    needs: wheels
     runs-on: ubuntu-latest
     environment: pypi
     permissions:
