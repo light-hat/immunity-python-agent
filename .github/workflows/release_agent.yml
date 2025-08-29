@@ -31,7 +31,7 @@ jobs:
         CIBW_BUILD: "cp37-* cp38-* cp39-* cp310-* cp311-* cp312-*"
         CIBW_ARCHS: "x86_64"
         CIBW_MANYLINUX_X86_64_IMAGE: "manylinux2014"
-        CIBW_BEFORE_ALL: "apt update && apt install -y cmake make gcc"
+        #CIBW_BEFORE_ALL: "apt update && apt install -y cmake make gcc"
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
