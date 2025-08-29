@@ -10,8 +10,8 @@ import traceback
 
 import requests
 
-from immunity_agent_python.common.logger import logger_config
-from immunity_agent_python.utils import Singleton, SystemInfo, scope, utils
+from immunity_python_agent.common.logger import logger_config
+from immunity_python_agent.utils import Singleton, SystemInfo, scope, utils
 
 logger = logger_config("openapi")
 

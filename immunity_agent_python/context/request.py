@@ -1,7 +1,7 @@
 import json
 from io import BytesIO
 
-from immunity_agent_python.utils import scope
+from immunity_python_agent.utils import scope
 
 
 class Request(object):

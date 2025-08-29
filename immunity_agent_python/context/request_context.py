@@ -1,8 +1,8 @@
 from http.client import responses
 
-from immunity_agent_python.common.logger import logger_config
-from immunity_agent_python.setting import Setting
-from immunity_agent_python.utils import scope, utils
+from immunity_python_agent.common.logger import logger_config
+from immunity_python_agent.setting import Setting
+from immunity_python_agent.utils import scope, utils
 
 logger = logger_config("request_context")
 

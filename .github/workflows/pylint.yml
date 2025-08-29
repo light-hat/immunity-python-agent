@@ -22,4 +22,4 @@ jobs:
           pip install pylint pylint-django[with-django]
       - name: Analysing the code with pylint
         run: |
-          cd immunity_agent_python && pylint .
+          cd immunity_python_agent && pylint .
