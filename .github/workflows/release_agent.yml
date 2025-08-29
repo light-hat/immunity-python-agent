@@ -43,7 +43,7 @@ jobs:
             yum install -y cmake make  # Добавьте ваши зависимости здесь
             
             # Build wheel
-            PYTHON_TAG=\$(/io/scripts/get_python_tag $PYTHON_VERSION)
+            PYTHON_TAG=\$(python3 /io/scripts/get_python_tag $PYTHON_VERSION)
             /opt/python/\$PYTHON_TAG/bin/pip install build
             /opt/python/\$PYTHON_TAG/bin/python -m build --wheel --outdir /io/dist/
           "
