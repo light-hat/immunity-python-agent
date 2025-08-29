@@ -1,0 +1,6 @@
+*.java linguist-vendored
+*.cs linguist-vendored
+*.s linguist-vendored
+*.asm linguist-vendored
+*.cmake linguist-vendored
+*.in linguist-vendored
